@@ -20,6 +20,7 @@ class Event(models.Model):
     name = models.CharField(max_length=50, verbose_name='Event Name',
                             help_text='The name of the Event must be descriptive and not misleading.')
     description = RichTextUploadingField()
+    town = models.CharField(max_length=20)
     venue = models.CharField(max_length=255, help_text='Please specify the name of the place.')
     venue_location = models.CharField(max_length=50, help_text='Please paste the google maps coordinates', blank=True,
                                       null=True)
@@ -49,7 +50,7 @@ class Event(models.Model):
 
 
 class EventTicket(models.Model):
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='tickets')
     ticket_number = models.CharField(max_length=50)
     type = models.CharField(max_length=20, choices=TICKET_TYPE)
     ticket_price = models.IntegerField(editable=False)

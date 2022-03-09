@@ -9,5 +9,6 @@ urlpatterns = [
     re_path(r'^ckeditor/', include('ckeditor_uploader.urls')),
     path('__debug__/', include('debug_toolbar.urls')),
     re_path(r'^ckeditor/', include('ckeditor_uploader.urls')),
-    path('', views.index, name='index')
+    path('', views.index, name='index'),
+    path('<int:pk>/detail', views.event_detail, name='event-detail'),
 ]
