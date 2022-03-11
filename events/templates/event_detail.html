@@ -20,15 +20,19 @@
             width: 100% !important;
             overflow-x: hidden;
             box-sizing: border-box;
+            background-color: #f5f1f1;
         }
+
         .event-image {
             width: 100%;
             height: 60vw;
         }
+
         .event-image img {
             width: 100%;
             height: 100%;
         }
+
         .event-wrap {
             border: 1px solid dodgerblue;
             padding: 0.1rem;
@@ -36,20 +40,25 @@
             align-items: center;
             margin: 1rem;
         }
+
         .event-wrap img {
             width: 40px;
             height: 40px;
         }
+
         .event-wrap-text {
             font-size: 130%;
             padding: 1rem;
         }
+
         .event-name {
             padding: 1rem;
             font-size: 150%;
             font-weight: bold;
             text-transform: uppercase;
+            margin-top: 2rem;
         }
+
         .restriction {
             margin-left: 1rem;
             font-weight: bold;
@@ -58,79 +67,159 @@
             width: fit-content;
             text-align: center;
             color: white;
-            background-color: orangered;
-            border: 1px solid orangered;
+            background-color: dodgerblue;
+            border: 1px solid dodgerblue;
         }
+
         .vvip-ticket-price {
             font-size: 130%;
             padding: 1rem;
         }
+
         .event-wrap-info {
             padding: 1rem;
         }
+
         .description {
             padding: 1rem;
         }
+
         .about-header {
             padding: 1rem;
         }
+
         .graphics {
-            display: flex;flex-direction: column;
+            display: flex;
+            flex-direction: column;
         }
+
         .graphics img {
             width: 100%;
             height: 100vw;
         }
+
         .google-map iframe {
             width: 400px;
             padding: 0.5rem;
             height: 70vw;
         }
+
         .action-buttons {
             font-weight: bold;
             position: fixed;
             bottom: 0;
-            left: 1rem;
+            right: 0;
             z-index: 999999999999;
         }
+
+        .sitting-plan-text {
+            font-weight: bold;
+            position: relative;
+            bottom: 1rem;
+        }
+
         .action-buttons a {
             background-color: orangered;
             border: 1px solid orangered;
-            font-size: 180% !important;
-            width: 300px !important;
+            font-size: 130% !important;
+            font-weight: bold;
+            margin-right: 0.5rem;
+            width: 13rem !important;
+            padding-left: 0.5rem;;
 
         }
-        @media screen and (min-width: 768px) {
+
+        @media screen and (min-width: 800px) {
             .event-image, .event-image img {
                 height: 40vh
-        }
-            .event-image {
-                position: absolute;
-                left: 0;
-                padding: 1rem;
-                width: 50vw;
-                height: 30vw;
             }
+
+            .event-image {
+                width: 100%;
+                height: 33rem;
+            }
+
             .event-image img {
                 height: 100%;
             }
+
+            .event-name-wrap {
+                text-align: center;
+            }
+
+            .restriction {
+                position: relative;
+                bottom: 3rem;
+                right: 3rem;
+                width: fit-content;
+                font-size: 70%;
+                border-radius: 2%;
+                background-color: dodgerblue;
+                margin-left: 5rem;
+            }
+
+            main {
+                display: flex !important;
+                flex-direction: row !important;
+                flex-wrap: wrap;
+                justify-content: center;
+                height: 30rem;
+                position: relative;
+                margin-left: 1rem;
+                margin-right: 2rem;
+                margin-bottom: 7rem !important;
+                width: 96%;
+            }
+
+            .sitting-plan-wrap {
+                position: relative;
+                left: 2rem;
+                top: 1rem;
+                width: 30rem;
+                height: 20rem;
+                margin-bottom: 1rem;
+            }
+
+            {#.event-wrap-info {#}
+            {#    width: 50%;#}
+            {#}#}
+            .long-and-graphics {
+                display: flex;
+                justify-content: space-around;
+                margin-bottom: 5rem;
+            }
+            .google-map iframe {
+                width: 40rem !important;
+                position: relative;
+                top: 5rem;
+                height: 25rem !important;
+                border: 1px solid dodgerblue;
+                margin-top: 1rem;
+            }
+            .additional-information {
+                padding: 1rem;
+            }
         }
-
-
+            .long-text {
+                width: 45%;
+                border-bottom: 1px solid dodgerblue;
+            }
     </style>
 {% endblock %}
 {% block content %}
     <div class="event-image">
         <img src="https://source.unsplash.com/random/?conference" alt="{{ event.name }}">
     </div>
-            <h1 class="event-name">{{ event.name }}</h1>
+    <div class="event-name-wrap"><h1 class="event-name">{{ event.name }}</h1></div>
+    <div class="restriction">
+        <div class="eligibility event-wrap-text">Eligibility: {{ event.age_or_gender_restriction }}</div>
+    </div>
     <main>
-        <div class="restriction">
-            <div class="eligibility event-wrap-text">Eligibility: {{ event.age_or_gender_restriction }}</div>
-        </div>
+
         <div class="date-wrap event-wrap">
             <img src="{% static 'assets/images/calendar-blue.svg' %}" alt="event date">
-            <div class="date event-wrap-text"><span>Date: </span>{{ event.date_starting }} - {{ event.date_ending }}</div>
+            <div class="date event-wrap-text"><span>Date: </span>{{ event.date_starting }} - {{ event.date_ending }}
+            </div>
         </div>
         <div class="venue-wrap event-wrap">
             <img src="{% static 'assets/images/location.svg' %}" alt="venue">
@@ -150,39 +239,45 @@
         </div>
         <div class="general-ticket-price-wrap event-wrap">
             <img src="{% static 'assets/images/ordinary.svg' %}" alt="General ticket price">
-            <div class="general-ticket-price event-wrap-text"><span>General Ticket: </span>K{{ event.general_ticket_price }}</div>
+            <div class="general-ticket-price event-wrap-text">
+                <span>General Ticket: </span>K{{ event.general_ticket_price }}</div>
         </div>
 
         <div class="sitting-plan-wrap event-wrap graphics">
             <img src="{% static 'assets/images/sitting-plan.png' %}" alt="sitting-plan">
-            <div class="sitting-plan event-wrap-text">Sitting Plan</div>
+            <div class="sitting-plan event-wrap-text"><span class="sitting-plan-text">Sitting Plan</span></div>
         </div>
-        <p class="about-wrap event-wrap-info">
-        <h2 class="about-header">About This Event</h2>
-        <div class="description">{{ event.description | safe }}</div>
-        </p>
-        <div class="additional-information event-wrap-info">
-            <h2>Additional Information</h2>
-            <p>{{ event.additional_information | safe }}</p>
-        </div>
-        <div class="google-map graphics">
-            <div style="width: 700px;position: relative;">
-                <iframe
-                        src="https://maps.google.com/maps?hl=en&amp;q=Lusaka+(Title)&amp;ie=UTF8&amp;t=&amp;z=10&amp;iwloc=B&amp;output=embed"
-                        frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
-                <div style="position: absolute;width: 80%;bottom: 10px;left: 0;right: 0;margin-left: auto;margin-right: auto;color: #000;text-align: center;">
-                    <small style="line-height: 1.8;font-size: 2px;background: #fff;"></small>
-                </div>
-                <style>#gmap_canvas img {
-                    max-width: none !important;
-                    background: none !important
-                }</style>
-            </div>
-            <br/>
-        </div>
+
     </main>
+    <div class="long-and-graphics">
+    <div class="long-text">
+    <p class="about-wrap event-wrap-info">
+    <h2 class="about-header">About This Event</h2>
+    <div class="description">{{ event.description | safe }}</div>
+    </p>
+    <div class="additional-information event-wrap-info">
+        <h2>Additional Information</h2>
+        <p>{{ event.additional_information | safe }}</p>
+    </div>
+    </div>
+    <div class="google-map graphics">
+        <div style="width: 700px;position: relative;">
+            <iframe
+                    src="https://maps.google.com/maps?hl=en&amp;q=Lusaka+(Title)&amp;ie=UTF8&amp;t=&amp;z=10&amp;iwloc=B&amp;output=embed"
+                    frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+            <div style="position: absolute;width: 80%;bottom: 10px;left: 0;right: 0;margin-left: auto;margin-right: auto;color: #000;text-align: center;">
+                <small style="line-height: 1.8;font-size: 2px;background: #fff;"></small>
+            </div>
+            <style>#gmap_canvas img {
+                max-width: none !important;
+                background: none !important
+            }</style>
+        </div>
+        <br/>
+    </div>
+    </div>
     <div class="action-buttons">
-    <a class="btn btn-primary" href="https://all1zed.com" role="button">Buy Ticket Now</a>
+        <a class="btn btn-primary" href="https://all1zed.com" role="button">Buy Ticket Now</a>
     </div>
 {% endblock %}
 

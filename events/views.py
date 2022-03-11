@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse, HttpResponseRedirect, get_obj
 from .models import Event
 from django.db.models import Avg, Count, Min, Sum
 from datetime import datetime, date, timedelta, time
+from django.core.paginator import Paginator
 
 
 def index(request):
@@ -11,10 +12,14 @@ def index(request):
     particular day or week.
     """
     today = date.today()
-    popular_events = Event.objects.filter(date_starting__gte=today).annotate(Count('tickets')).order_by('-tickets__count')[:16]
-    upcoming_events = Event.objects.filter(date_starting__gte=today).order_by('-date_starting')[:16]
+    popular_events = Event.objects.filter(date_starting__gte=today).annotate(Count('tickets')).order_by('-tickets__count')[:20]
+    upcoming_events = Event.objects.filter(date_starting__gte=today).order_by('-date_starting')[:20]
+    popular_event_paginator = Paginator(popular_events, 16)
+    upcoming_events_paginator = Paginator(upcoming_events, 16)
     context = {
         'upcoming_events': upcoming_events, 'popular_events': popular_events,
+        'popular_events_paginator': popular_event_paginator,
+        'upcoming_events_paginator': upcoming_events_paginator,
     }
     return render(request, 'index.html', context)
 
