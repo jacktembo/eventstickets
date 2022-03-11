@@ -11,8 +11,8 @@ def index(request):
     particular day or week.
     """
     today = date.today()
-    popular_events = Event.objects.filter(date_starting__gte=today).annotate(Count('tickets')).order_by('-tickets__count')[:15]
-    upcoming_events = Event.objects.filter(date_starting__gte=today).order_by('-date_starting')[:15]
+    popular_events = Event.objects.filter(date_starting__gte=today).annotate(Count('tickets')).order_by('-tickets__count')[:16]
+    upcoming_events = Event.objects.filter(date_starting__gte=today).order_by('-date_starting')[:16]
     context = {
         'upcoming_events': upcoming_events, 'popular_events': popular_events,
     }

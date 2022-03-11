@@ -89,7 +89,18 @@ dev_db = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
     }
 }
-DATABASES = dev_db
+prod_db = {
+    'default': {
+        'NAME': 'events',
+        'ENGINE': 'mysql.connector.django',
+        'USER': 'root',
+        'PASSWORD': '30970084',
+        'OPTIONS': {
+          'autocommit': True,
+        },
+    }
+}
+DATABASES = prod_db
 
 
 # Password validation

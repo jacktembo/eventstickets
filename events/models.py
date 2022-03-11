@@ -1,3 +1,5 @@
+import datetime
+
 from django.conf.global_settings import AUTH_USER_MODEL
 from django.db import models
 from django.http import HttpRequest
@@ -16,7 +18,7 @@ TICKET_TYPE = [
 
 
 class Event(models.Model):
-    user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, editable=False)
+    user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, editable=False, default=1)
     name = models.CharField(max_length=50, verbose_name='Event Name',
                             help_text='The name of the Event must be descriptive and not misleading.')
     description = RichTextUploadingField()
@@ -27,7 +29,7 @@ class Event(models.Model):
     organizer = models.CharField(max_length=255, verbose_name='Who is the Organizer of this Event?')
     banner_image = models.ImageField(upload_to='events/images', verbose_name='Upload a Banner Image for this Event',
                                      blank=True, null=True)
-    date_time_published = models.DateTimeField(auto_now_add=True)
+    date_published = models.DateField(auto_now_add=True)
     date_starting = models.DateField(verbose_name='When is this Event starting?')
     time_starting = models.TimeField(verbose_name='At what time will this event start')
     date_ending = models.DateField(verbose_name='When will this Event close?')
