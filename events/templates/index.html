@@ -113,6 +113,9 @@
         .popular {
             margin-bottom: 1rem;
         }
+        .event-title-bold {
+            font-weight: bold;
+        }
     </style>
 {% endblock %}
 {% block content %}
@@ -169,7 +172,7 @@
                         <img src="https://source.unsplash.com/random/?{{ forloop.counter }}" class="card-img-top"
                              alt="...">
                         <div class="card-body">
-                            <h5 class="card-title">{{ upcoming_event.name | truncatechars:30 | safe }}</h5>
+                            <h5 class="card-title event-title-bold">{{ upcoming_event.name | truncatechars:30 | safe }}</h5>
                             <div class="text-body">
                                 <div class="town">{{ upcoming_event.town | truncatechars:15 }}</div>
 
@@ -197,10 +200,10 @@
                         <img src="https://source.unsplash.com/random/?{{ forloop.counter }}" class="card-img-top"
                              alt="...">
                         <div class="card-body">
-                            <h5 class="card-title">{{ popular_event.name | safe }}</h5>
+                            <h5 class="card-title event-title-bold">{{ popular_event.name | safe }}</h5>
                             <div class="text-body">
                                 <p class="card-text">{{ popular_event.venue | safe }}</p>
-                                <p class="card-text"><small class="text-muted"><strong>Date:</strong>
+                                <p class="card-text"><small class="text-muted">
                                     {{ popular_event.date_starting }}</small>
                                 </p>
                                 <p class="featured-price"> FROM K{{ popular_event.general_ticket_price }}</p>

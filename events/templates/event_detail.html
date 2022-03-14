@@ -23,6 +23,10 @@
             background-color: #f5f1f1;
         }
 
+        .slider-display {
+            color: white;
+            background-color: dodgerblue;
+        }
         .event-image {
             width: 100%;
             height: 60vw;
@@ -118,15 +122,28 @@
             bottom: 1rem;
         }
 
-        .action-buttons a {
-            background-color: orangered;
+        .btn-primary {
             border: 1px solid orangered;
             font-size: 130% !important;
             font-weight: bold;
-            margin-right: 0.5rem;
-            width: 13rem !important;
+            margin-right: 1rem;
+            width: 15rem !important;
             padding-left: 0.5rem;;
 
+        }
+        .btn-primary {
+            background-color: orangered !important;
+            border-color: orangered;
+        }
+        .continue-checkout {
+            z-index: 9999999999999999999999999999999;
+        }
+        .number-of-tickets-display {
+            color: dodgerblue;
+        }
+        .event-wrap {
+            font-size: 100%;
+            white-space: nowrap;
         }
 
         @media screen and (min-width: 800px) {
@@ -167,8 +184,12 @@
                 position: relative;
                 margin-left: 1rem;
                 margin-right: 2rem;
-                margin-bottom: 7rem !important;
+                margin-bottom: 5rem !important;
                 width: 96%;
+            }
+
+            .event-wrap {
+            {#height: fit-content;#}
             }
 
             .sitting-plan-wrap {
@@ -196,14 +217,14 @@
                 border: 1px solid dodgerblue;
                 margin-top: 1rem;
             }
-            .additional-information {
-                padding: 1rem;
-            }
-        }
             .long-text {
-                width: 45%;
                 border-bottom: 1px solid dodgerblue;
             }
+            }
+
+
+
+
     </style>
 {% endblock %}
 {% block content %}
@@ -218,12 +239,16 @@
 
         <div class="date-wrap event-wrap">
             <img src="{% static 'assets/images/calendar-blue.svg' %}" alt="event date">
-            <div class="date event-wrap-text"><span>Date: </span>{{ event.date_starting }} - {{ event.date_ending }}
+            <div class="date event-wrap-text"><span>Date: </span>{{ event.date_starting }}
             </div>
         </div>
         <div class="venue-wrap event-wrap">
             <img src="{% static 'assets/images/location.svg' %}" alt="venue">
             <div class="venue event-wrap-text"><span>Venue: </span>{{ event.venue }}</div>
+        </div>
+        <div class="venue-wrap event-wrap">
+            <img src="{% static 'assets/images/town.svg' %}" alt="town">
+            <div class="venue event-wrap-text"><span>Town: {{ event.town }}</span></div>
         </div>
         <div class="organizer-wrap event-wrap">
             <img src="{% static 'assets/images/organizer.svg' %}" alt="event organizer">
@@ -276,10 +301,60 @@
         <br/>
     </div>
     </div>
-    <div class="action-buttons">
-        <a class="btn btn-primary" href="https://all1zed.com" role="button">Buy Ticket Now</a>
-    </div>
-{% endblock %}
+    <button type="button" class="btn btn-primary action-buttons" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Buy Ticket Now</button>
+<div class="modal fade continue-checkout" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen-sm-down">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"><strong>Ticket Information</strong></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'card-payment' event_id=event.id %}" method="get">
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Your Full Name:</label>
+            <input type="text" class="form-control" id="full-name"
+                   placeholder="Jack Smith" name="client-full-name" required minlength="3" maxlength="20">
+          </div>
+          <div class="mb-3">
+            <label for="client-phone-number" class="col-form-label">Your Phone Number:</label>
+            <input type="text" class="form-control" id="client-phone-number"
+                   placeholder="097xxxxxxx" name="client-phone-number" required minlength="9" maxlength="14">
+          </div>
+            <div class="mb-3">
+            <label for="ticket-type" class="col-form-label">Choose Ticket(s) Type To Buy:</label>
+                <select class="form-select" aria-label="Default select example"
+                        name="ticket-type" required>
+                  <option selected>------</option>
+                  <option value="VVIP">VVIP</option>
+                  <option value="VIP">VIP</option>
+                  <option value="General">General Ticket</option>
+                </select>
+          </div>
+            <div class="mb-3">
+            <label for="number-of-tickets" class="form-label">Number Of Tickets To Buy:</label>
+            <input type="range" class="form-range" min="1" max="10" value="1" id="number-of-tickets" name="number-of-tickets" oninput="this.nextElementSibling.value = 'You have chosen to buy ' + this.value + ' Ticket(s) for this Event'">
+                <output class="number-of-tickets-display">You have chosen to buy 1 Ticket for this event.</output>
+          </div>
+            <div class="mb-3">
+            <label for="payment-method" class="col-form-label">Choose Payment Method:</label>
+                <select class="form-select" aria-label="Default select example"
+                        name="payment-method" required>
+                  <option selected>------</option>
+                  <option value="card">VISA/Mastercard</option>
+                  <option value="mobile-money">Mobile Money</option>
+                </select>
+          </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel Order</button>
+            <button type="submit" class="btn btn-primary">Continue To Checkout</button>
+      </div>
+        </form>
+      </div>
 
+    </div>
+  </div>
+</div>
+{% endblock %}
 </body>
 </html>

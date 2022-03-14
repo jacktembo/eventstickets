@@ -1,4 +1,6 @@
 import datetime
+import secrets
+import string
 
 from django.conf.global_settings import AUTH_USER_MODEL
 from django.db import models
@@ -57,8 +59,8 @@ class EventTicket(models.Model):
     type = models.CharField(max_length=20, choices=TICKET_TYPE)
     ticket_price = models.IntegerField(editable=False)
     datetime_bought = models.DateTimeField(auto_now_add=True)
-    client_first_name = models.CharField(max_length=50)
-    client_last_name = models.CharField(max_length=50)
+    client_full_name = models.CharField(max_length=50)
+    client_phone_number = models.CharField(max_length=14)
 
     class Meta:
         verbose_name_plural = 'Events Tickets'
@@ -73,6 +75,8 @@ class EventTicket(models.Model):
             self.ticket_price = self.event.vip_ticket_price
         elif self.type == 'General':
             self.ticket_price = self.event.general_ticket_price
+        alphabet = string.ascii_uppercase + string.digits
+        self.ticket_number = ''.join(secrets.choice(alphabet) for i in range(10))
         super(EventTicket, self).save(*args, **kwargs)
 
 

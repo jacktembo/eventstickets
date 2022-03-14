@@ -71,6 +71,12 @@ class EventAdmin(ModelAdmin):
             return 0
 
 
+class EventTicketAdmin(admin.ModelAdmin):
+    list_display = ['ticket_number', 'type', 'client_full_name','client_phone_number', 'event']
+    search_fields = ['ticket_number', 'event']
+    list_filter = ['type']
+
+
 admin.site.register(Event, EventAdmin)
-admin.site.register(EventTicket)
+admin.site.register(EventTicket, EventTicketAdmin)
 admin.site.register(All1ZedEventsCommission, All1ZedEventCommissionAdmin)

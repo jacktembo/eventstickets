@@ -4,6 +4,7 @@
 {% endblock %}
 {% block footer %}
     <style>
+
         ul {
             margin: 0px;
             padding: 0px;
@@ -12,6 +13,14 @@
         .footer-section {
             background: #151414;
             position: relative;
+        }
+        .app-stores-images {
+            display: flex;
+        }
+        .app-stores-images img {
+            margin: 1rem;
+            width: 10rem;
+            height: 10rem;
         }
 
         .footer-cta {
@@ -142,7 +151,6 @@
 
         .subscribe-form {
             position: relative;
-            overflow: hidden;
         }
 
         .subscribe-form input {
@@ -196,7 +204,9 @@
             font-size: 14px;
             color: #878787;
         }
-
+        .app-stores-images {
+            width: 100% !important;
+        }
         
     </style>
     <span class="loader"></span>
@@ -257,40 +267,20 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-4 col-lg-4 col-md-6 mb-30">
-                        <div class="footer-widget">
-                            <div class="footer-widget-heading">
-                                <h3>Useful Links</h3>
-                            </div>
-                            <ul>
-                                <li><a href="#">Home</a></li>
-                                <li><a href="#">about</a></li>
-                                <li><a href="#">services</a></li>
-                                <li><a href="#">Contact</a></li>
-                                <li><a href="#">About us</a></li>
-                                <li><a href="#">Our Services</a></li>
-                                <li><a href="#">Contact us</a></li>
-                                <li><a href="#">Latest News</a></li>
-                            </ul>
-                        </div>
-                    </div>
+
                     <div class="col-xl-4 col-lg-4 col-md-6 mb-50">
                         <div class="footer-widget">
                             <div class="footer-widget-heading">
-                                <h3>Subscribe</h3>
+                                <h3>Download The App</h3>
                             </div>
                             <div class="footer-text mb-25">
                                 <p>
-                                    Don’t miss to subscribe to our new feeds, kindly fill the form
-                                    below.
+                                    Download All1Zed Mobile App to get most exciting features.
                                 </p>
                             </div>
-                            <div class="subscribe-form">
-                                <form action="#">
-                                    {% csrf_token %}
-                                    <input type="email" placeholder="Email Address"/>
-                                    <button type="submit">Subscribe</button>
-                                </form>
+                            <div class="subscribe-form app-stores-images">
+                                <a href="https://play.google.com/store/apps/details?id=com.orem.ali1zed"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="google play"></a>
+                                <a href="https://apps.apple.com/us/app/all1zed/id1588388550"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt=""></a>
                             </div>
                         </div>
                     </div>

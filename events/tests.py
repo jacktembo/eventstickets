@@ -26,7 +26,7 @@ def divide_chunks(l, n):
 
 # How many elements each
 # list should have
-number_of_seats = 22
+number_of_seats = 56
 n = ((number_of_seats - 1) // 2) - 1
 x = list(divide_chunks([i for i in range(1, number_of_seats + 1)], n))
 for item in x:

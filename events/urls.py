@@ -11,4 +11,5 @@ urlpatterns = [
     re_path(r'^ckeditor/', include('ckeditor_uploader.urls')),
     path('', views.index, name='index'),
     path('<int:pk>/detail', views.event_detail, name='event-detail'),
+    path('pay-with-card/<event_id>', views.card_payment, name='card-payment'),
 ]
