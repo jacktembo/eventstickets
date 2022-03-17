@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>Event Ticket</title>
+</head>
+<style>
+    * {
+        font-weight: bold !important;
+    }
+    #invoice-POS {
+        padding: 1rem;
+        margin: 0 auto;
+        {#width: 80%;#}
+        border: 1px solid dodgerblue;
+        background: #FFF;
+        height: fit-content;
+    }
+
+    #invoice-POS ::selection {
+        background: #f31544;
+        color: #FFF;
+    }
+
+    #invoice-POS h1 {
+        font-size: 1.5em;
+        color: dodgerblue;
+    }
+
+    #invoice-POS h2 {
+        font-size: 0.9em;
+    }
+
+    #invoice-POS h3 {
+        font-size: 1.2em;
+        font-weight: 300;
+        line-height: 2em;
+    }
+
+    #invoice-POS p {
+        font-size: 0.7em;
+        color: #04203b;
+        line-height: 1.2em;
+    }
+
+    #invoice-POS #top, #invoice-POS #mid, #invoice-POS #bot {
+        /* Targets all id with 'col-' */
+        border-bottom: 1px solid #EEE;
+    }
+
+    #invoice-POS #top {
+        min-height: 100px;
+    }
+
+    #invoice-POS #mid {
+        {#min-height: 80px;#}
+    }
+
+    #invoice-POS #bot {
+        min-height: 50px;
+    }
+
+    .all1zed-logo {
+        height: 60px;
+        width: 60px;
+        background-size: 60px 60px;
+    }
+
+    #invoice-POS .clientlogo {
+        float: left;
+        height: 60px;
+        width: 60px;
+        background-size: 60px 60px;
+        border-radius: 50px;
+    }
+
+    #invoice-POS .info {
+        display: block;
+        margin-left: 0;
+    }
+
+    #invoice-POS .title {
+        float: right;
+    }
+
+    #invoice-POS .title p {
+        text-align: right;
+    }
+
+    #invoice-POS table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    #invoice-POS .tabletitle {
+        font-size: 0.5em;
+        background: #EEE;
+    }
+
+    #invoice-POS .service {
+        border-bottom: 1px solid #2a3f54;
+    }
+
+    #invoice-POS .item {
+        width: 24mm;
+    }
+
+    #invoice-POS .itemtext {
+        font-size: 0.5em;
+    }
+
+    #invoice-POS #legalcopy {
+        margin-top: 5mm;
+    }
+
+    body {
+        background-color: #e0dbdb;
+    }
+
+    #bot {
+        padding: 1rem;
+    }
+
+    .info {
+        margin-left: 5mm !important;
+    }
+
+
+
+
+
+
+
+
+    body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .qr {
+        margin: 1rem;
+        width: 180px;
+        height: 180px;
+    }
+    .qrcode {
+        display: flex;
+        justify-content: center;
+    }
+    .legal {
+        font-size: 50% !important;
+    }
+    .event-img {
+        width: 100%;
+        height: 200px;
+    }
+    .logo img {
+        width: 5rem;
+        height: 2.5rem;
+        z-index: 99999;
+    }
+
+    .main-img img {
+        width: 100%;
+    }
+    .entry-ticket {
+        color: dodgerblue;
+    }
+</style>
+<body>
+
+<div id="invoice-POS">
+    <div class="logo">
+        <img src="{% static 'assets/images/all1zed-logo.png' %}" alt="all1zed-logo">
+    </div>
+    <div class="main-img">
+            <img src="https://source.unsplash.com/random/?conference" alt="" class="event-img">
+        </div>
+
+    <div id="mid">
+        <div class="info">
+            <h2 class="entry-ticket">ENTRY TICKET</h2>
+            <p>
+                {{ event_name }}
+            </p>
+        </div>
+    </div><!--End Invoice Mid-->
+
+    <div id="bot">
+
+        <div id="table">
+            <table>
+                <tr class="tabletitle">
+                    <td class="item"><h2>INFO</h2></td>
+                    <td class="Rate"><h2>VALUE</h2></td>
+                </tr>
+
+                <tr class="service">
+                    <td class="tableitem"><p class="itemtext">Ticket Number</p></td>
+                    <td class="tableitem"><p class="itemtext">{{ ticket_number }}</p></td>
+                </tr>
+
+                <tr class="service">
+                    <td class="tableitem"><p class="itemtext">Ticket Type</p></td>
+                    <td class="tableitem"><p class="itemtext">{{ ticket_type }}</p></td>
+                </tr>
+
+                <tr class="service">
+                    <td class="tableitem"><p class="itemtext">Ticket Price</p></td>
+                    <td class="tableitem"><p class="itemtext">K{{ ticket_price }}</p></td>
+                </tr>
+                <tr class="service">
+                    <td class="tableitem"><p class="itemtext">City</p></td>
+                    <td class="tableitem"><p class="itemtext">{{ city }}</p></td>
+                </tr>
+                <tr class="service">
+                    <td class="tableitem"><p class="itemtext">Venue</p></td>
+                    <td class="tableitem"><p class="itemtext">{{ venue }}</p></td>
+                </tr>
+
+                <tr class="service">
+                    <td class="tableitem"><p class="itemtext">Event Date</p></td>
+                    <td class="tableitem"><p class="itemtext">{{ start_date }}</p></td>
+                </tr>
+                <tr class="service">
+                    <td class="tableitem"><p class="itemtext">Time</p></td>
+                    <td class="tableitem"><p class="itemtext">{{ start_time }} - {{ end_time }}</p></td>
+                </tr>
+
+            </table>
+        </div><!--End Table-->
+        <div class="qrcode">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?data=www.jacktembo.com&size=200x200" alt="" class="qr">
+        </div>
+        <div id="legalcopy">
+            <p class="legal"><strong>Thank you for your Purchase. You can now use this ticket for entry at the
+                Event.</strong></p>
+        </div>
+
+    </div><!--End InvoiceBot-->
+</div><!--End Invoice-->
+<p>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+    <script type="text/javascript">
+        var doc = new jsPDF();
+        var specialElementHandlers = {
+            '#editor': function (element, renderer) {
+                return true;
+            }
+        };
+
+
+        $('#generatePDF').click(function () {
+            doc.fromHTML($('#invoice-POS').html(), 15, 15, {
+                'elementHandlers': specialElementHandlers
+            });
+            doc.save('sample_file.pdf');
+        });
+    </script>
+</body>
+</html>

@@ -72,10 +72,29 @@ class EventAdmin(ModelAdmin):
 
 
 class EventTicketAdmin(admin.ModelAdmin):
-    list_display = ['ticket_number', 'type', 'client_full_name','client_phone_number', 'event']
+    list_display = ['ticket_number', 'type', 'price', 'client_full_name','client_phone_number',
+                    'event_name', 'date_bought',]
     search_fields = ['ticket_number', 'event']
-    list_filter = ['type']
+    list_filter = ['type', 'datetime_bought',]
+    list_per_page = 10
 
+    def get_queryset(self, request):
+        """
+        Allowing Events admins to only access only those event Tickets for their events.
+        """
+        qs = super(EventTicketAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(user=request.user)
+
+    def event_name(self, event_ticket: EventTicket):
+        return f'{event_ticket.event.name[:15]}...'
+
+    def price(self, event_ticket:EventTicket):
+        return f'K{event_ticket.ticket_price}'
+
+    def date_bought(self, event_ticket: EventTicket):
+        return event_ticket.datetime_bought
 
 admin.site.register(Event, EventAdmin)
 admin.site.register(EventTicket, EventTicketAdmin)

@@ -262,17 +262,26 @@
               <a href="#" class="billing">Save Big with All1Zed</a>
             </div>
             <div class="mt-1">
-              <sup class="super-price">$9.99</sup>
-              <span class="super-month">/Month</span>
+              <sup class="super-price"><strong>K{{ ticket_price }}</strong></sup>
+              <span class="super-month">Pay Once</span>
             </div>
           </div>
           <hr class="mt-0 line" />
           <div class="p-3">
             <div class="d-flex justify-content-between mb-2">
-              <span>Refferal Bonouses</span> <span>-$2.00</span>
+              <span>Refferal Bonuses</span> <span>K0.00</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span>Ticket Names</span> <span>{{ client_full_name }}</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span>Ticket Type(s)</span> <span>{{ ticket_type }}</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span>Your Phone Number</span> <span>{{ client_phone_number }}</span>
             </div>
             <div class="d-flex justify-content-between">
-              <span>Vat <i class="fa fa-clock-o"></i></span> <span>-20%</span>
+              <span>VAT <i class="fa fa-clock-o"></i></span> <span>K0</span>
             </div>
           </div>
           <hr class="mt-0 line" />
@@ -281,11 +290,11 @@
               <span>Today you pay(ZMW)</span>
               <small>Once Off</small>
             </div>
-            <span>$0</span>
+            <span><strong>K{{ ticket_price }}</strong></span>
           </div>
           <div class="p-3">
             <button class="btn btn-primary btn-block free-button" type="submit">
-              Complete Payment
+                <strong>PAY NOW</strong>
             </button>
             <div class="text-center"><a href="#">Have a promo code?</a></div>
           </div>

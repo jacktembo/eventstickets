@@ -326,9 +326,9 @@
                 <select class="form-select" aria-label="Default select example"
                         name="ticket-type" required>
                   <option selected>------</option>
-                  <option value="VVIP">VVIP</option>
-                  <option value="VIP">VIP</option>
-                  <option value="General">General Ticket</option>
+                  <option value="VVIP">VVIP - K{{ event.vvip_ticket_price }} Per Ticket</option>
+                  <option value="VIP">VIP - K{{ event.vip_ticket_price }} Per Ticket</option>
+                  <option value="General">General-Ticket - K{{ event.general_ticket_price }} Per Ticket</option>
                 </select>
           </div>
             <div class="mb-3">
@@ -356,5 +356,7 @@
   </div>
 </div>
 {% endblock %}
+<script>
+</script>
 </body>
 </html>

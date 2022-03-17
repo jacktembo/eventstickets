@@ -3,6 +3,11 @@
 {% block title %}All1Zed Tickets {% endblock %}
 {% block stylesheet %}
     <style>
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin: 1rem;
+        }
         * {
             box-sizing: border-box;
         }
@@ -116,6 +121,7 @@
         .event-title-bold {
             font-weight: bold;
         }
+
     </style>
 {% endblock %}
 {% block content %}
@@ -166,7 +172,7 @@
     <section class="upcoming">
         <h1>Upcoming Events</h1>
         <div class="card-group upcoming-card-group">
-            {% for upcoming_event in upcoming_events %}
+            {% for upcoming_event in upcoming_page_obj %}
                 <a href="{% url 'event-detail' upcoming_event.id %}">
                     <div class="card featured-card">
                         <img src="https://source.unsplash.com/random/?{{ forloop.counter }}" class="card-img-top"
@@ -191,10 +197,33 @@
 
         </div>
     </section>
+{#    !--Pagination-->#}
+      <div class="pagination">
+      {% if upcoming_page_obj.has_other_pages %}
+    <div class="btn-group" role="group" aria-label="Item pagination">
+        {% if upcoming_page_obj.has_previous %}
+            <a href="?page={{ upcoming_page_obj.previous_page_number }}" class="btn btn-outline-primary">Previous</a>
+        {% endif %}
+
+        {% for page_number in upcoming_page_obj.paginator.page_range %}
+            {% if upcoming_page_obj.number == page_number %}
+                <button class="btn btn-outline-primary active">
+                    <span>Page {{ page_number }} of {{ upcoming_page_obj.paginator.count }} <span class="sr-only"></span></span>
+                </button>
+
+            {% endif %}
+        {% endfor %}
+
+        {% if upcoming_page_obj.has_next %}
+            <a href="?page={{ upcoming_page_obj.next_page_number }}" class="btn btn-outline-primary">Next</a>
+        {% endif %}
+    </div>
+    {% endif %}
+      </div>
     <section class="popular">
         <h1>Popular Events</h1>
         <div class="card-group upcoming-card-group">
-            {% for popular_event in popular_events %}
+            {% for popular_event in popular_page_obj %}
                 <a href="{% url 'event-detail' popular_event.id %}">
                     <div class="card featured-card">
                         <img src="https://source.unsplash.com/random/?{{ forloop.counter }}" class="card-img-top"
@@ -214,5 +243,27 @@
             {% endfor %}
 
         </div>
+        <div class="pagination">
+      {% if popular_page_obj.has_other_pages %}
+    <div class="btn-group" role="group" aria-label="Item pagination">
+        {% if popular_page_obj.has_previous %}
+            <a href="?page={{ popular_page_obj.previous_page_number }}" class="btn btn-outline-primary">Previous</a>
+        {% endif %}
+
+        {% for page_number in popular_page_obj.paginator.page_range %}
+            {% if popular_page_obj.number == page_number %}
+                <button class="btn btn-outline-primary active">
+                    <span>Page {{ page_number }} of {{ popular_page_obj.paginator.count }} <span class="sr-only"></span></span>
+                </button>
+
+            {% endif %}
+        {% endfor %}
+
+        {% if popular_page_obj.has_next %}
+            <a href="?page={{ popular_page_obj.next_page_number }}" class="btn btn-outline-primary">Next</a>
+        {% endif %}
+    </div>
+    {% endif %}
+      </div>
     </section>
 {% endblock %}

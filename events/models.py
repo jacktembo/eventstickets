@@ -41,7 +41,7 @@ class Event(models.Model):
                                            help_text='Price is in Zambian Kwacha (ZMW)')
     general_ticket_price = models.IntegerField(verbose_name='General Ticket Price (Ordinary)',
                                                help_text='Price is in Zambian Kwacha (ZMW)')
-    sitting_plan = models.FileField(blank=True, null=True)
+    sitting_plan = models.ImageField(blank=True, null=True)
     age_or_gender_restriction = models.CharField(max_length=255, choices=AGE_OR_GENDER_RESTRICTION,
                                                  help_text='Who is Eligible to attend this Event?')
     additional_information = RichTextUploadingField()
@@ -54,6 +54,7 @@ class Event(models.Model):
 
 
 class EventTicket(models.Model):
+    user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, editable=False, default=1)
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='tickets')
     ticket_number = models.CharField(max_length=50)
     type = models.CharField(max_length=20, choices=TICKET_TYPE)
