@@ -110,8 +110,9 @@ class DownloadView(WeasyTemplateResponseMixin, TemplateView):
         ticket_number = self.ticket_number
         ticket = get_object_or_404(EventTicket, ticket_number=ticket_number)
         event = ticket.event
+        qrcode_image = f'https://api.qrserver.com/v1/create-qr-code/?data={ticket_number}&size=200x200&format=svg'
         context = {
-            'ticket': ticket,
+            'ticket': ticket, 'banner_image': event.banner_image, 'qrcode_image': qrcode_image,
             'event_name': ticket.event.name, 'ticket_number': ticket_number,
             'ticket_type': ticket.type, 'ticket_price': ticket.ticket_price,
             'city': ticket.event.town, 'venue': ticket.event.venue,
@@ -131,3 +132,7 @@ class DownloadView(WeasyTemplateResponseMixin, TemplateView):
 
     def get_pdf_filename(self):
         return 'All1Zed-ticket-{at}.pdf'
+
+
+def scan(request):
+    return render(request, 'qrcode_scanner.html')
