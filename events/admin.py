@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
-from .models import Event, EventTicket, All1ZedEventsCommission
+from .models import Event, EventTicket, All1ZedEventsCommission, SliderImage
 from django.db.models import Sum
 
 percentage_commission = 7
@@ -31,7 +31,7 @@ class EventAdmin(ModelAdmin):
         return qs.filter(user=request.user)
 
     list_display = [
-        'name', 'total_tickets_sold', 'vvip_tickets_sold', 'vip_tickets_sold',
+        'id', 'name', 'total_tickets_sold', 'vvip_tickets_sold', 'vip_tickets_sold',
         'general_tickets_sold', 'your_earnings', 'all1zed_earnings', 'total_sales',
     ]
     search_fields = ['name', 'description', 'venue', 'additional_information', 'organizer']
@@ -99,3 +99,4 @@ class EventTicketAdmin(admin.ModelAdmin):
 admin.site.register(Event, EventAdmin)
 admin.site.register(EventTicket, EventTicketAdmin)
 admin.site.register(All1ZedEventsCommission, All1ZedEventCommissionAdmin)
+admin.site.register(SliderImage)

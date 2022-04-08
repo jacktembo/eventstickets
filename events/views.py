@@ -1,8 +1,8 @@
 import math
 from time import timezone
-
+from django.http import JsonResponse
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect, get_object_or_404, get_list_or_404
-from .models import Event, EventTicket
+from .models import Event, EventTicket, SliderImage
 from django.db.models import Avg, Count, Min, Sum
 from datetime import datetime, date, timedelta, time
 from django.core.paginator import Paginator
@@ -28,7 +28,6 @@ def send_sms(recipient, message):
     response = requests.request("POST", url, headers=headers, data=payload)
     return response.status_code
 
-
 def index(request):
     """
     Featured events designates the four (4) featured events for a specific day or week or month.
@@ -36,6 +35,10 @@ def index(request):
     particular day or week.
     """
     today = date.today()
+    slider_images = SliderImage.objects.all()
+    first_slider_image = slider_images[0].image
+    second_slider_image = slider_images[1].image
+    third_slider_image = slider_images[2].image
     popular_events = Event.objects.filter(date_starting__gte=today).annotate(Count('tickets')).order_by(
         '-tickets__count')
     upcoming_events = Event.objects.filter(date_starting__gte=today).order_by('date_starting')
@@ -52,6 +55,8 @@ def index(request):
         'popular_events_paginator': popular_events_paginator,
         'upcoming_events_paginator': upcoming_events_paginator, 'page_number': page_number,
         'upcoming_page_obj': upcoming_page_obj, 'popular_page_obj': popular_page_obj,
+        'slider_images': slider_images, 'first_slider_image': first_slider_image,
+        'second_slider_image': second_slider_image, 'third_slider_image': third_slider_image,
     }
     return render(request, 'index.html', context)
 
@@ -125,14 +130,55 @@ class DownloadView(WeasyTemplateResponseMixin, TemplateView):
 
     template_name = 'ticket.html'
 
-    # extra_context = {
-    #     'client_name': 'j'
-    # }
-    # dynamically generate filename
-
     def get_pdf_filename(self):
         return 'All1Zed-ticket-{at}.pdf'
 
 
 def scan(request):
-    return render(request, 'qrcode_scanner.html')
+    return render(request, 'qrcode_scanner_instascan.html')
+
+
+def tickets_list(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    tickets = get_list_or_404(EventTicket, event=event)
+    context = {
+        'tickets': tickets, 'event': event,
+    }
+    return render(request, 'tickets_list.html', context)
+
+
+class TicketsListView(WeasyTemplateResponseMixin, TemplateView):
+    def get_context_data(self, **kwargs):
+        self.event_id = self.kwargs['event_id']
+        event = get_object_or_404(Event, pk=self.event_id)
+        tickets = get_list_or_404(EventTicket, event=event)
+        context = {
+            'tickets': tickets, 'event': event,
+        }
+        return context
+
+    template_name = 'tickets_list.html'
+
+
+def scan_ticket(request, ticket_number):
+    ticket = EventTicket.objects.filter(ticket_number=ticket_number)
+    if ticket.exists() and not ticket.first().scanned:
+        ticket.update(scanned=True)
+        return JsonResponse('Verified Successfully', safe=False)
+    elif ticket.exists() and ticket.first().scanned:
+        return JsonResponse('Ticket Already Scanned', safe=False)
+    else:
+        return JsonResponse('Invalid Ticket', safe=False)
+
+
+def events(request):
+    events = Event.objects.all()
+    paginator = Paginator(events, 20)
+    page_number = request.GET.get('page')
+    events_page_object = paginator.get_page(page_number)
+    context = {
+        'events': events, 'page_number': page_number, 'paginator': paginator,
+        'page_obj': events_page_object,
+    }
+    return render(request, 'events.html', context)
+

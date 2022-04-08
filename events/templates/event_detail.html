@@ -229,7 +229,7 @@
 {% endblock %}
 {% block content %}
     <div class="event-image">
-        <img src="https://source.unsplash.com/random/?conference" alt="{{ event.name }}">
+        <img src="{{ event.banner_image.url }}" alt="{{ event.name }}">
     </div>
     <div class="event-name-wrap"><h1 class="event-name">{{ event.name }}</h1></div>
     <div class="restriction">
@@ -269,7 +269,7 @@
         </div>
 
         <div class="sitting-plan-wrap event-wrap graphics">
-            <img src="{% static 'assets/images/sitting-plan.png' %}" alt="sitting-plan">
+            <img src="{{ event.sitting_plan.url }}" alt="sitting-plan">
             <div class="sitting-plan event-wrap-text"><span class="sitting-plan-text">Sitting Plan</span></div>
         </div>
 

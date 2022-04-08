@@ -62,6 +62,7 @@ class EventTicket(models.Model):
     datetime_bought = models.DateTimeField(auto_now_add=True)
     client_full_name = models.CharField(max_length=50)
     client_phone_number = models.CharField(max_length=14)
+    scanned = models.BooleanField(default=False)
 
     class Meta:
         verbose_name_plural = 'Events Tickets'
@@ -90,3 +91,8 @@ class All1ZedEventsCommission(models.Model):
     class Meta:
         verbose_name_plural = 'All1Zed Events Commission'
         verbose_name = 'All1Zed Events Commission'
+
+
+class SliderImage(models.Model):
+    image = models.ImageField(verbose_name='Upload a slider image here')
+

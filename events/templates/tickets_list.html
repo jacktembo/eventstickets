@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>Tickets | {{ event.name }}</title>
+</head>
+
+<style>
+    .logo img {
+        width: fit-content;
+        height: 70px;
+        margin-bottom: 1rem;
+    }
+
+    strong {
+        color: dodgerblue;
+    }
+
+    h1, li {
+        color: orangered;
+    }
+
+    h1 {
+        text-transform: uppercase;
+        margin-top: 2rem;
+    }
+
+    .title {
+        color: black;
+        font-size: 110%;
+    }
+
+    li {
+        margin: 1rem;
+    }
+
+    .date-generated {
+        padding: 0.2rem;
+        width: 60%;
+        border: 1px solid green;
+    }
+
+    .event {
+        margin: 1rem;
+        color: dodgerblue;
+    }
+</style>
+<body>
+<div class="logo">
+    <a href="{% url 'index' %}"><img src="{% static 'assets/images/all1zed-tickets.svg' %}" alt="all1zed-logo">
+    </a>
+</div>
+<div class="date-generated">
+    Document Generated on: {% now "jS F, Y" %}
+</div>
+<div>
+    <div class="event">
+        Event Name: {{ event.name }}
+    </div>
+    <h1 class="title">Ticket Numbers Sold</h1>
+</div>
+<ol class="list-group">
+    {% for ticket in tickets %}
+        <li class="list-group-item">
+            <input class="form-check-input me-1" type="checkbox" value="" aria-label="...">
+            <strong>{{ ticket.ticket_number }}</strong>
+        </li>
+    {% endfor %}
+    |--------END OF THE LIST OF EVENT TICKETS----------------|
+</ol>
+</body>
+</html>

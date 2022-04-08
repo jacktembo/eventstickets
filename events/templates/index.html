@@ -136,21 +136,21 @@
         </div>
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="https://source.unsplash.com/random/?conference" class="d-block w-100" alt="...">
+                <img src="{{ first_slider_image.url }}" class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block">
                     <h5>Sports Events Tickets</h5>
                     <p>By Sports entry tickets online.</p>
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="https://source.unsplash.com/random/?meeting" class="d-block w-100" alt="...">
+                <img src="{{ second_slider_image.url }}" class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block">
                     <h5>Conferences Tickets</h5>
                     <p>Buy Tickets for conference.</p>
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="https://source.unsplash.com/random/?event" class="d-block w-100" alt="...">
+                <img src="{{ third_slider_image.url }}" class="d-block w-100" alt="first-slide">
                 <div class="carousel-caption d-none d-md-block">
                     <h5>Entertainment Events Tickets</h5>
                     <p>Buy Tickets for any entertainment event in Zambia.</p>
@@ -175,7 +175,7 @@
             {% for upcoming_event in upcoming_page_obj %}
                 <a href="{% url 'event-detail' upcoming_event.id %}">
                     <div class="card featured-card">
-                        <img src="https://source.unsplash.com/random/?{{ forloop.counter }}" class="card-img-top"
+                        <img src="{{ upcoming_event.banner_image.url }}" class="card-img-top"
                              alt="...">
                         <div class="card-body">
                             <h5 class="card-title event-title-bold">{{ upcoming_event.name | truncatechars:30 | safe }}</h5>
@@ -226,7 +226,7 @@
             {% for popular_event in popular_page_obj %}
                 <a href="{% url 'event-detail' popular_event.id %}">
                     <div class="card featured-card">
-                        <img src="https://source.unsplash.com/random/?{{ forloop.counter }}" class="card-img-top"
+                        <img src="{{ popular_event.banner_image.url }}" class="card-img-top"
                              alt="...">
                         <div class="card-body">
                             <h5 class="card-title event-title-bold">{{ popular_event.name | safe }}</h5>

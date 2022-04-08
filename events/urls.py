@@ -15,11 +15,15 @@ urlpatterns = [
     path('__debug__/', include('debug_toolbar.urls')),
     re_path(r'^ckeditor/', include('ckeditor_uploader.urls')),
     path('', views.index, name='index'),
+    path('events', views.events, name='events'),
     path('<int:pk>/detail', views.event_detail, name='event-detail'),
     path('pay-with-card/<event_id>', views.card_payment, name='card-payment'),
     path('<ticket_number>/download', views.DownloadView.as_view()),
     path('ticket', TemplateView.as_view(template_name='ticket.html', extra_context=ticket_context)),
     path('scan', views.scan, name='scan'),
+    path('scan/<ticket_number>', views.scan_ticket, name='scan-ticket'),
+    path('<int:event_id>/tickets/view', views.tickets_list, name='tickets-view'),
+    path('<int:event_id>/tickets/download', views.TicketsListView.as_view(), name='tickets-download'),
 ]
 if settings.DEBUG or settings.DEBUG == False:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

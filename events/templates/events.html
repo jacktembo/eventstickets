@@ -1,10 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
+{% extends 'base.html' %}
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    {% block title %}
+        All1Zed Events
+    {% endblock %}
 </head>
-<body>
+{% block stylesheet %}
+    <style>
+    html, body {
+        width: 100% !important;
+        overflow-x: hidden !important;
+        background-color: #f5f1f1;
+    }
+    .card {
+        height: 22rem !important;
+        width: 90%;
+        margin-bottom: 2rem;
+        margin-top: 1rem;
+    }
+    .card img {
+        height: 60% !important;
+    }
+    a {
+        text-decoration: none;
+    }
+    .col a {
+        display: flex;
+        justify-content: center;
+    }
+    .price {
+        font-weight: bold;
+        font-size: 150%;
+        color: orangered;
+    }
+    </style>
+{% endblock %}
+{% block content %}
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for event in events %}
+    <div class="col">
+        <a href="{% url 'event-detail' pk=event.pk %}">
+            <div class="card h-100">
+            <img src="https://source.unsplash.com/random/?{{ forloop.counter }}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{ event.name }}</h5>
+                <p class="card-text">{{ event.description | truncatechars:100 }}</p>
+            </div>
+            <div class="card-footer">
+                <small class="text-muted">{{ event.date_starting }} | <span class="price">FROM K{{ event.general_ticket_price }}</span></small>
+            </div>
+        </div>
+        </a>
+    </div>
+    {% endfor %}
 
-</body>
+
+</div>
+{% endblock %}
 </html>
