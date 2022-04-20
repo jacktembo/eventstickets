@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect, get_object_or_404, get_list_or_404
 from django.urls import reverse
 
-from .models import Event, EventTicket, SliderImage
+from .models import Event, EventTicket, SliderImage, All1ZedEventsCommission
 from django.db.models import Avg, Count, Min, Sum
 from datetime import datetime, date, timedelta, time
 from django.core.paginator import Paginator
@@ -94,9 +94,11 @@ def mobile_payment(request, event_id):
 
 
 def payment_approval(request, event_id):
+    percentage_commission = All1ZedEventsCommission.objects.first().percentage_commission
     reference_number = request.POST.get('reference-number', False)
     event_id = request.POST.get('event_id', False)
     event = get_object_or_404(Event, pk=int(event_id))
+    event_mobile_money_number = event.mobile_money_number
     ticket_type = request.POST.get('ticket-type', False)
     ticket_price = event.vvip_ticket_price if ticket_type == 'VVIP' else event.vip_ticket_price if ticket_type == 'VIP' else event.general_ticket_price if ticket_type == 'General' else None
     client_full_name = request.POST.get('client-full-name', False)
@@ -110,8 +112,10 @@ def payment_approval(request, event_id):
     if phone_numbers.get_network(client_phone_number) == 'airtel':
         r = kazang.airtel_pay_query(client_phone_number, int(ticket_price) * 100, reference_number)
         if r.get('response_code', False) == '0':
+            deposit = int(ticket_price) * 100 - (int(ticket_price * 100) * (int(percentage_commission) / 100))
+            kazang.airtel_cash_in(event_mobile_money_number, deposit)
             ticket.save()
-            message = f"Dear {client_full_name}, Your All1Zed Event Ticket Number is {ticket.ticket_number}. Download your ticket at https://events.all1zed.com/{ticket.ticket_number}/download. Thank you for using All1Zed Tickets."
+            message = f"Dear {client_full_name}, Your {event.name} Ticket Number is {ticket.ticket_number}. Download your ticket at https://events.all1zed.com/{ticket.ticket_number}/download. Thank you for using All1Zed Tickets."
             sms.send_sms(client_phone_number, message)
             return HttpResponseRedirect(reverse('download-ticket', args=(ticket.ticket_number,)))
         else:
