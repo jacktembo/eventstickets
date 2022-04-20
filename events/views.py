@@ -1,7 +1,8 @@
-import math
 from time import timezone
 from django.http import JsonResponse
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect, get_object_or_404, get_list_or_404
+from django.urls import reverse
+
 from .models import Event, EventTicket, SliderImage
 from django.db.models import Avg, Count, Min, Sum
 from datetime import datetime, date, timedelta, time
@@ -12,21 +13,10 @@ import requests
 import json
 from django_weasyprint import WeasyTemplateResponseMixin
 from django_weasyprint.views import WeasyTemplateResponse
+from . import sms
+from . import kazang
+from . import phone_numbers
 
-
-def send_sms(recipient, message):
-    url = "https://probasesms.com/api/json/multi/res/bulk/sms"
-    payload = json.dumps({
-        "username": "All1Zed@12$$", "password": "All1Zed@sms12$$",
-        "recipient": [int('26' + recipient)], "senderid": "All1Zed", "message": message,
-        "source": "All1Zed"
-    })
-    headers = {
-        'Content-Type': 'application/json'
-    }
-
-    response = requests.request("POST", url, headers=headers, data=payload)
-    return response.status_code
 
 def index(request):
     """
@@ -69,7 +59,7 @@ def event_detail(request, pk):
     return render(request, 'event_detail.html', context)
 
 
-def card_payment(request, event_id):
+def mobile_payment(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     if request.method == 'GET':
         client_phone_number = request.GET.get('client-phone-number', False)
@@ -80,29 +70,52 @@ def card_payment(request, event_id):
         context = {
             'event_id': event_id, 'client_full_name': client_full_name,
             'ticket_type': ticket_type, 'client_phone_number': client_phone_number,
-            'ticket_price': ticket_price,
+            'ticket_price': ticket_price, 'event': event
         }
         return render(request, 'payment_details.html', context)
+
     elif request.method == 'POST':
         ticket_type = request.POST.get('ticket-type', False)
+        ticket_price = event.vvip_ticket_price if ticket_type == 'VVIP' else event.vip_ticket_price if ticket_type == 'VIP' else event.general_ticket_price if ticket_type == 'General' else None
         client_full_name = request.POST.get('client-full-name', False)
         client_phone_number = request.POST.get('client-phone-number')
         ticket = EventTicket(event=event, client_full_name=client_full_name,
                              type=ticket_type, user=event.user,
                              client_phone_number=client_phone_number)
-        if 1 < 5:
-            assert ticket.client_full_name != False and ticket.client_phone_number != False \
-                   and ticket.type != False
-            ticket.save()
-            message = f'Dear {ticket.client_full_name}. Your All1Zed Ticket Number is {ticket.ticket_number}. Download your Ticket at ' \
-                      f'https://all1zed.com.'
-            send_sms(
-                ticket.client_phone_number, message
-            )
-            return HttpResponse(f'your ticket number is {ticket.ticket_number}')
-        else:
-            return HttpResponse('Something went wrong!')
 
+        if phone_numbers.get_network(client_phone_number) == 'airtel':
+            pay = kazang.airtel_pay_payment(client_phone_number, int(ticket_price) * 100)
+            context = {
+                'ticket_type': ticket_type, 'client_full_name': client_full_name,
+                'client_phone_number': client_phone_number, 'event_id': event_id,
+                'ticket_price': ticket_price, 'event': event, 'reference_number': pay.get('airtel_reference', False)
+            }
+            return render(request, 'payment_waiting.html', context)
+
+
+def payment_approval(request, event_id):
+    reference_number = request.POST.get('reference-number', False)
+    event_id = request.POST.get('event_id', False)
+    event = get_object_or_404(Event, pk=int(event_id))
+    ticket_type = request.POST.get('ticket-type', False)
+    ticket_price = event.vvip_ticket_price if ticket_type == 'VVIP' else event.vip_ticket_price if ticket_type == 'VIP' else event.general_ticket_price if ticket_type == 'General' else None
+    client_full_name = request.POST.get('client-full-name', False)
+    client_phone_number = request.POST.get('client-phone-number')
+    ticket = EventTicket(event=event, client_full_name=client_full_name,
+                         type=ticket_type, user=event.user,
+                         client_phone_number=client_phone_number)
+    ticket = EventTicket(event=event, client_full_name=client_full_name,
+                         type=ticket_type, user=event.user,
+                         client_phone_number=client_phone_number)
+    if phone_numbers.get_network(client_phone_number) == 'airtel':
+        r = kazang.airtel_pay_query(client_phone_number, int(ticket_price) * 100, reference_number)
+        if r.get('response_code', False) == '0':
+            ticket.save()
+            message = f"Dear {client_full_name}, Your All1Zed Event Ticket Number is {ticket.ticket_number}. Download your ticket at https://events.all1zed.com/{ticket.ticket_number}/download. Thank you for using All1Zed Tickets."
+            sms.send_sms(client_phone_number, message)
+            return HttpResponseRedirect(reverse('download-ticket', args=(ticket.ticket_number,)))
+        else:
+            return HttpResponse(r['response_message'])
 
 # @pdf_decorator()
 def generate_pdf_ticket(request):
@@ -132,6 +145,7 @@ class DownloadView(WeasyTemplateResponseMixin, TemplateView):
 
     def get_pdf_filename(self):
         return 'All1Zed-ticket-{at}.pdf'
+
 
 
 def scan(request):
@@ -182,3 +196,72 @@ def events(request):
     }
     return render(request, 'events.html', context)
 
+
+def payment_waiting(request):
+    return render(request, 'payment_waiting.html')
+
+
+# def pay(request, event):
+#     phone_number = request.POST.get('client-phone-number', False)
+#     full_name = request.POST.get('client-full-name', False)
+#     event = Event.objects.get(id=int(request.POST.get('event-id', False)))
+#     amount = str(int(Event.objects.get(id=int(request.data['route'])).price * 100))
+#     if phone_numbers.get_network(phone_number) == 'airtel':
+#         r = kazang.airtel_pay_payment(phone_number, amount)
+#         context = {
+#             'reference_number': r['reference_number']
+#         }
+#         return render('payment_waiting.html', context)
+#     elif phone_numbers.get_network(phone_number) == 'zamtel':
+#         r = kazang.zamtel_money_pay(phone_number, amount)
+#         return Response({'reference_number': r['confirmation_number']})
+#     elif phone_numbers.get_network(phone_number) == 'mtn':
+#         r = kazang.mtn_debit(phone_number, amount)
+#         return Response({'reference_number': r.get('supplier_transaction_id', r)})
+
+
+# def pay_confirm(request):
+#     phone_number = request.data['passenger_phone']
+#     amount = str(int(Route.objects.get(id=int(request.data['route'])).price * 100))
+#     reference_number = request.data['reference_number']
+#     passenger_first_name = request.data.get('passenger_first_name', None)
+#     passenger_last_name = request.data.get('passenger_last_name', None)
+#     passenger_phone = phone_number
+#     departure_date = date.fromisoformat(request.data['departure_date'])
+#     route = Route.objects.get(id=int(request.data.get('route', None)))
+#     seat_number = request.data.get('seat_number', None)
+#     ticket = Ticket.objects.create(passenger_phone=passenger_phone, passenger_first_name=passenger_first_name,
+#                                    passenger_last_name=passenger_last_name, departure_date=departure_date,
+#                                    route=route, seat_number=int(seat_number)
+#                                    )
+#     serializer = TicketSerializer(ticket)
+#     if phone_numbers.get_network(phone_number) == 'airtel':  # If the number is airtel, process accordingly.
+#         confirm = kazang.airtel_pay_query(phone_number, amount, reference_number)
+#         if not confirm.get('response_code', False) == 0:
+#             return Response({"message": "success", "ticket": serializer.data,
+#                              "ticket_url": f"https://all1zed-tickets.herokuapp.com/api/tickets/{ticket.ticket_number}"})
+#         else:
+#             return Response(
+#                 {"message": "declined", "reason": "customer has not yet approved the funds for the ticket."},
+#                 status=status.HTTP_402_PAYMENT_REQUIRED)
+#
+#     elif phone_numbers.get_network(phone_number) == 'zamtel':
+#         confirm = kazang.zamtel_money_pay_confirm(phone_number, amount, reference_number)
+#         if confirm.get('response_code', False) == 0:
+#             return Response({"message": "success", "ticket": serializer.data,
+#                              "ticket_url": f"https://all1zed-tickets.herokuapp.com/api/tickets/{ticket.ticket_number}"})
+#         else:
+#             return Response(
+#                 {"message": "declined", "reason": "customer has not yet approved the funds for the ticket."},
+#                 status=status.HTTP_402_PAYMENT_REQUIRED)
+#
+#     elif phone_numbers.get_network(phone_number) == 'mtn':
+#         pass
+
+
+def authorize_payment(phone_number, amount):
+    if phone_number:
+        return 'fizz'
+    elif not phone_number:
+        return 'buss'
+    airtel_money_pay = ''

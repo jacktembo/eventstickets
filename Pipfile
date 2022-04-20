@@ -5,6 +5,16 @@ name = "pypi"
 
 [packages]
 requests = "*"
+django = "*"
+django-ckeditor-5 = "*"
+django-weasyprint = "*"
+django-xhtml2pdf = "*"
+django-filter = "*"
+django-debug-toolbar = "*"
+django-cors-headers = "*"
+django-ckeditor = "*"
+whitenoise = "*"
+mysql-connector-python = "*"
 
 [dev-packages]
 

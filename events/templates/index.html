@@ -229,9 +229,11 @@
                         <img src="{{ popular_event.banner_image.url }}" class="card-img-top"
                              alt="...">
                         <div class="card-body">
-                            <h5 class="card-title event-title-bold">{{ popular_event.name | safe }}</h5>
+                            <h5 class="card-title event-title-bold">{{ popular_event.name | safe | truncatechars:30}}</h5>
                             <div class="text-body">
-                                <p class="card-text">{{ popular_event.venue | safe }}</p>
+                                <div class="town">{{ popular_event.town | truncatechars:15 }}</div>
+
+                                <p class="card-text">{{ popular_event.venue | safe | truncatechars:15}}</p>
                                 <p class="card-text"><small class="text-muted">
                                     {{ popular_event.date_starting }}</small>
                                 </p>

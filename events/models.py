@@ -25,12 +25,11 @@ class Event(models.Model):
                             help_text='The name of the Event must be descriptive and not misleading.')
     description = RichTextUploadingField()
     town = models.CharField(max_length=20)
-    venue = models.CharField(max_length=255, help_text='Please specify the name of the place.')
+    venue = models.CharField(max_length=30, help_text='Please specify the name of the place.')
     venue_location = models.CharField(max_length=50, help_text='Please paste the google maps coordinates', blank=True,
                                       null=True)
-    organizer = models.CharField(max_length=255, verbose_name='Who is the Organizer of this Event?')
-    banner_image = models.ImageField(upload_to='events/images', verbose_name='Upload a Banner Image for this Event',
-                                     blank=True, null=True)
+    organizer = models.CharField(max_length=30, verbose_name='Who is the Organizer of this Event?')
+    banner_image = models.ImageField(upload_to='BannerImages', verbose_name='Upload a Banner Image for this Event')
     date_published = models.DateField(auto_now_add=True)
     date_starting = models.DateField(verbose_name='When is this Event starting?')
     time_starting = models.TimeField(verbose_name='At what time will this event start')
@@ -41,10 +40,13 @@ class Event(models.Model):
                                            help_text='Price is in Zambian Kwacha (ZMW)')
     general_ticket_price = models.IntegerField(verbose_name='General Ticket Price (Ordinary)',
                                                help_text='Price is in Zambian Kwacha (ZMW)')
-    sitting_plan = models.ImageField(blank=True, null=True)
+    sitting_plan = models.ImageField(upload_to='SittingPlans')
     age_or_gender_restriction = models.CharField(max_length=255, choices=AGE_OR_GENDER_RESTRICTION,
                                                  help_text='Who is Eligible to attend this Event?')
     additional_information = RichTextUploadingField()
+    mobile_money_number = models.CharField(max_length=10,
+                                           help_text='Mobile Money number where you want to receive funds for the '
+                                                     'event.')
 
     class Meta:
         verbose_name_plural = 'My Events'
@@ -56,7 +58,7 @@ class Event(models.Model):
 class EventTicket(models.Model):
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, editable=False, default=1)
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='tickets')
-    ticket_number = models.CharField(max_length=50)
+    ticket_number = models.CharField(max_length=50, editable=False)
     type = models.CharField(max_length=20, choices=TICKET_TYPE)
     ticket_price = models.IntegerField(editable=False)
     datetime_bought = models.DateTimeField(auto_now_add=True)
@@ -96,3 +98,16 @@ class All1ZedEventsCommission(models.Model):
 class SliderImage(models.Model):
     image = models.ImageField(verbose_name='Upload a slider image here')
 
+
+from django.db import models
+
+
+class KazangSession(models.Model):
+    """
+    Kazang (Content Ready Session).
+    """
+    session_uuid = models.CharField(max_length=255, editable=False)
+    date_time_created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.session_uuid

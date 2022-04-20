@@ -242,17 +242,22 @@
             <div class="date event-wrap-text"><span>Date: </span>{{ event.date_starting }}
             </div>
         </div>
+        <div class="date-wrap event-wrap">
+            <img src="{% static 'assets/images/time.svg' %}" alt="event date">
+            <div class="date event-wrap-text"><span>Time: </span>{{ event.time_starting }}
+            </div>
+        </div>
         <div class="venue-wrap event-wrap">
             <img src="{% static 'assets/images/location.svg' %}" alt="venue">
-            <div class="venue event-wrap-text"><span>Venue: </span>{{ event.venue }}</div>
+            <div class="venue event-wrap-text"><span>Venue: </span>{{ event.venue | truncatechars:25}}</div>
         </div>
         <div class="venue-wrap event-wrap">
             <img src="{% static 'assets/images/town.svg' %}" alt="town">
-            <div class="venue event-wrap-text"><span>Town: {{ event.town }}</span></div>
+            <div class="venue event-wrap-text"><span>Town: {{ event.town | truncatechars:20 }}</span></div>
         </div>
         <div class="organizer-wrap event-wrap">
             <img src="{% static 'assets/images/organizer.svg' %}" alt="event organizer">
-            <div class="organizer event-wrap-text"><span>Organizer: </span>{{ event.organizer }}</div>
+            <div class="organizer event-wrap-text"><span>Organizer: </span>{{ event.organizer | truncatechars:20}}</div>
         </div>
         <div class="vvip-ticket-price-wrap event-wrap">
             <img src="{% static 'assets/images/vip-pass.svg' %}" alt="VVIP ticket price">
@@ -310,7 +315,9 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form action="{% url 'card-payment' event_id=event.id %}" method="get">
+        <form action="{% url 'card-payment' event_id=event.id %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="event-id" value="{{ event.id }}">
           <div class="mb-3">
             <label for="recipient-name" class="col-form-label">Your Full Name:</label>
             <input type="text" class="form-control" id="full-name"
@@ -341,8 +348,9 @@
                 <select class="form-select" aria-label="Default select example"
                         name="payment-method" required>
                   <option selected>------</option>
-                  <option value="card">VISA/Mastercard</option>
-                  <option value="mobile-money">Mobile Money</option>
+                  <option value="mobile-money" selected>Mobile Money</option>
+                    <option value="card" disabled>VISA/Mastercard</option>
+
                 </select>
           </div>
             <div class="modal-footer">

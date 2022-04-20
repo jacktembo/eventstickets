@@ -14,7 +14,6 @@ from pathlib import Path
 # import pymysql
 # pymysql.install_as_MySQLdb()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-import rest_framework.pagination
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -102,7 +101,7 @@ prod_db = {
         },
     }
 }
-DATABASES = prod_db
+DATABASES = dev_db
 
 
 # Password validation
