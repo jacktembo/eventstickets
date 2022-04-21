@@ -1,0 +1,16 @@
+Django==4.0.4
+django-ckeditor==6.4.0
+django-ckeditor-5==0.0.16
+django-cors-headers==3.11.0
+django-debug-toolbar==3.2.4
+django-filter==21.1
+django-weasyprint==2.1.0
+django-xhtml2pdf==0.0.4
+mysql-connector-python==8.0.28
+Pillow==9.1.0
+qrcode==7.3.1
+reportlab==3.6.9
+requests==2.27.1
+weasyprint==54.3
+whitenoise==6.0.0
+xhtml2pdf==0.2.7
