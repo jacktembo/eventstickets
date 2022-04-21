@@ -16,8 +16,6 @@ from django_weasyprint.views import WeasyTemplateResponse
 from . import sms
 from . import kazang
 from . import phone_numbers
-
-
 def index(request):
     """
     Featured events designates the four (4) featured events for a specific day or week or month.
