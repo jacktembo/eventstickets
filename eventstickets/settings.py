@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'cloudinary_storage',
     'django.contrib.staticfiles',
+    'cloudinary',
     'events',
     'django_filters',
     'ckeditor',
@@ -180,3 +182,9 @@ CKEDITOR_CONFIGS = {
     },
 }
 
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'magicbrains',
+    'API_KEY': '589471393545124',
+    'API_SECRET': '1VWzFZ9Da6ptbk7eahdq7Snpsek'
+}
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
