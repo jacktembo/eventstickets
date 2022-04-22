@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'cloudinary',
     'events',
+    'internal',
     'django_filters',
     'ckeditor',
     'ckeditor_uploader',
