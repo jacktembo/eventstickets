@@ -189,3 +189,7 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': '1VWzFZ9Da6ptbk7eahdq7Snpsek'
 }
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+EASY_MAPS_GOOGLE_KEY = 'AIzaSyA4M3GTDZHQKqc6TDo0dZGcA8qwRMkJDvk'
+GOOGLE_MAPS_API_KEY = EASY_MAPS_GOOGLE_KEY
+
+

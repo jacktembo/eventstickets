@@ -17,6 +17,12 @@ whitenoise = "*"
 mysql-connector-python = "*"
 django-cloudinary-storage = "*"
 cloudinary = "*"
+django-map-widgets = "*"
+django-geoposition = "*"
+django-utils-six = "*"
+django-google-maps = "*"
+django-easy-maps = "*"
+googlemaps = "*"
 
 [dev-packages]
 

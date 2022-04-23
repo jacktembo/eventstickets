@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.contrib.admin import ModelAdmin
 from .models import Event, EventTicket, All1ZedEventsCommission, SliderImage, KazangSession
 from django.db.models import Sum
-
+from django_google_maps import widgets as map_widgets
+from django_google_maps import fields as map_fields
 percentage_commission = int(All1ZedEventsCommission.objects.all().first().percentage_commission)
 
 
@@ -17,6 +18,9 @@ class All1ZedEventCommissionAdmin(admin.ModelAdmin):
 
 
 class EventAdmin(ModelAdmin):
+    formfield_overrides = {
+        map_fields.AddressField: {'widget': map_widgets.GoogleMapsAddressWidget},
+    }
     def save_model(self, request, obj, form, change):
         obj.user = request.user
         super().save_model(request, obj, form, change)

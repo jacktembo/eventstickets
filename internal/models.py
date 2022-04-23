@@ -17,6 +17,7 @@ class TermsAndConditions(models.Model):
         help_text='By using All1Zed Events Platform, all stakeholders agree to your specific terms. Describe them here.'
     )
 
+
     def __str__(self):
         return 'Terms And Conditions'
 
