@@ -154,7 +154,7 @@ def payment_approval(request, event_id):
         else:
             return HttpResponse(r['response_message'])
 
-
+@pdf_decorator()
 def generate_pdf_ticket(request):
     return render(request, 'ticket.html')
 
@@ -295,3 +295,5 @@ def payment_waiting(request):
 #     elif phone_numbers.get_network(phone_number) == 'mtn':
 #         pass
 
+def payment_success(request):
+    return render(request, 'payment_success.html')
