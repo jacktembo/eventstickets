@@ -22,6 +22,9 @@
             box-sizing: border-box;
             background-color: #f5f1f1;
         }
+        .main-section {
+            margin-top: 3rem;
+        }
         .event-name-wrap {
             margin-top: 5rem !important;
         }
@@ -234,6 +237,7 @@
     </style>
 {% endblock %}
 {% block content %}
+    <div class="main-section">
     <div class="event-image">
         <img src="{{ event.banner_image.url }}" alt="{{ event.name }}">
     </div>
@@ -255,7 +259,7 @@
         </div>
         <div class="venue-wrap event-wrap">
             <img src="{% static 'assets/images/location.svg' %}" alt="venue">
-            <div class="venue event-wrap-text"><span>Venue: </span>{{ event.venue | truncatechars:25}}</div>
+            <div class="venue event-wrap-text"><span>Venue: </span>{{ event.venue | truncatechars:25 }}</div>
         </div>
         <div class="venue-wrap event-wrap">
             <img src="{% static 'assets/images/town.svg' %}" alt="town">
@@ -263,7 +267,8 @@
         </div>
         <div class="organizer-wrap event-wrap">
             <img src="{% static 'assets/images/organizer.svg' %}" alt="event organizer">
-            <div class="organizer event-wrap-text"><span>Organizer: </span>{{ event.organizer | truncatechars:20}}</div>
+            <div class="organizer event-wrap-text"><span>Organizer: </span>{{ event.organizer | truncatechars:20 }}
+            </div>
         </div>
         <div class="vvip-ticket-price-wrap event-wrap">
             <img src="{% static 'assets/images/vip-pass.svg' %}" alt="VVIP ticket price">
@@ -286,96 +291,106 @@
 
     </main>
     <div class="long-and-graphics">
-    <div class="long-text">
-    <p class="about-wrap event-wrap-info">
-    <h2 class="about-header">About This Event</h2>
-    <div class="description">{{ event.description | safe }}</div>
-    </p>
-    <div class="additional-information event-wrap-info">
-        <h2>Additional Information</h2>
-        <p>{{ event.additional_information | safe }}</p>
-    </div>
-    </div>
-    <div class="google-map graphics">
-        <div style="width: 700px;position: relative;">
-            <iframe
-  width="450"
-  height="250"
-  frameborder="0" style="border:0"
-  referrerpolicy="no-referrer-when-downgrade"
-  src="https://www.google.com/maps/embed/v1/view?key=AIzaSyA4M3GTDZHQKqc6TDo0dZGcA8qwRMkJDvk
-&center={{ event.venue_location }}&zoom=18&region=ZM"
-  allowfullscreen>
-</iframe>
-            <div style="position: absolute;width: 80%;bottom: 10px;left: 0;right: 0;margin-left: auto;margin-right: auto;color: #000;text-align: center;">
-                <small style="line-height: 1.8;font-size: 2px;background: #fff;"></small>
+        <div class="long-text">
+            <p class="about-wrap event-wrap-info">
+            <h2 class="about-header">About This Event</h2>
+            <div class="description">{{ event.description | safe }}</div>
+            </p>
+            <div class="additional-information event-wrap-info">
+                <h2>Additional Information</h2>
+                <p>{{ event.additional_information | safe }}</p>
             </div>
-            <style>#gmap_canvas img {
-                max-width: none !important;
-                background: none !important
-            }</style>
         </div>
-        <br/>
+        <div class="google-map graphics">
+            <div style="width: 700px;position: relative;">
+                <iframe
+                        width="450"
+                        height="250"
+                        frameborder="0" style="border:0"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        src="https://www.google.com/maps/embed/v1/view?key=AIzaSyA4M3GTDZHQKqc6TDo0dZGcA8qwRMkJDvk
+&center={{ event.venue_location }}&zoom=18&region=ZM"
+                        allowfullscreen>
+                </iframe>
+                <div style="position: absolute;width: 80%;bottom: 10px;left: 0;right: 0;margin-left: auto;margin-right: auto;color: #000;text-align: center;">
+                    <small style="line-height: 1.8;font-size: 2px;background: #fff;"></small>
+                </div>
+                <style>#gmap_canvas img {
+                    max-width: none !important;
+                    background: none !important
+                }</style>
+            </div>
+            <br/>
+        </div>
     </div>
-    </div>
-    <button type="button" class="btn btn-primary action-buttons" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Buy Ticket Now</button>
-<div class="modal fade continue-checkout" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-fullscreen-sm-down">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"><strong>Ticket Information</strong></h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form action="{% url 'card-payment' event_id=event.id %}" method="post">
-            {% csrf_token %}
-            <input type="hidden" name="event-id" value="{{ event.id }}">
-          <div class="mb-3">
-            <label for="recipient-name" class="col-form-label">Your Full Name:</label>
-            <input type="text" class="form-control" id="full-name"
-                   placeholder="Jack Smith" name="client-full-name" required minlength="3" maxlength="20">
-          </div>
-          <div class="mb-3">
-            <label for="client-phone-number" class="col-form-label">Your Phone Number:</label>
-            <input type="text" class="form-control" id="client-phone-number"
-                   placeholder="097xxxxxxx" name="client-phone-number" required minlength="9" maxlength="14">
-          </div>
-            <div class="mb-3">
-            <label for="ticket-type" class="col-form-label">Choose Ticket(s) Type To Buy:</label>
-                <select class="form-select" aria-label="Default select example"
-                        name="ticket-type" required>
-                  <option selected>------</option>
-                  <option value="VVIP">VVIP - K{{ event.vvip_ticket_price }} Per Ticket</option>
-                  <option value="VIP">VIP - K{{ event.vip_ticket_price }} Per Ticket</option>
-                  <option value="General">General-Ticket - K{{ event.general_ticket_price }} Per Ticket</option>
-                </select>
-          </div>
-            <div class="mb-3">
-            <label for="number-of-tickets" class="form-label">Number Of Tickets To Buy:</label>
-            <input type="range" class="form-range" min="1" max="10" value="1" id="number-of-tickets" name="number-of-tickets" oninput="this.nextElementSibling.value = 'You have chosen to buy ' + this.value + ' Ticket(s) for this Event'">
-                <output class="number-of-tickets-display">You have chosen to buy 1 Ticket for this event.</output>
-          </div>
-            <div class="mb-3">
-            <label for="payment-method" class="col-form-label">Choose Payment Method:</label>
-                <select class="form-select" aria-label="Default select example"
-                        name="payment-method" required>
-                  <option selected>------</option>
-                  <option value="mobile-money" selected>Mobile Money</option>
-                    <option value="card" disabled>VISA/Mastercard</option>
+    <button type="button" class="btn btn-primary action-buttons" data-bs-toggle="modal" data-bs-target="#exampleModal"
+            data-bs-whatever="@mdo">Buy Ticket Now
+    </button>
+    <div class="modal fade continue-checkout" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen-sm-down">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"><strong>Ticket Information</strong></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{% url 'card-payment' event_id=event.id %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="event-id" value="{{ event.id }}">
+                        <div class="mb-3">
+                            <label for="recipient-name" class="col-form-label">Your Full Name:</label>
+                            <input type="text" class="form-control" id="full-name"
+                                   placeholder="Jack Smith" name="client-full-name" required minlength="3"
+                                   maxlength="20">
+                        </div>
+                        <div class="mb-3">
+                            <label for="client-phone-number" class="col-form-label">Your Phone Number:</label>
+                            <input type="text" class="form-control" id="client-phone-number"
+                                   placeholder="097xxxxxxx" name="client-phone-number" required minlength="9"
+                                   maxlength="14">
+                        </div>
+                        <div class="mb-3">
+                            <label for="ticket-type" class="col-form-label">Choose Ticket(s) Type To Buy:</label>
+                            <select class="form-select" aria-label="Default select example"
+                                    name="ticket-type" required>
+                                <option selected>------</option>
+                                <option value="VVIP">VVIP - K{{ event.vvip_ticket_price }} Per Ticket</option>
+                                <option value="VIP">VIP - K{{ event.vip_ticket_price }} Per Ticket</option>
+                                <option value="General">General-Ticket - K{{ event.general_ticket_price }} Per Ticket
+                                </option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="number-of-tickets" class="form-label">Number Of Tickets To Buy:</label>
+                            <input type="range" class="form-range" min="1" max="10" value="1" id="number-of-tickets"
+                                   name="number-of-tickets"
+                                   oninput="this.nextElementSibling.value = 'You have chosen to buy ' + this.value + ' Ticket(s) for this Event'">
+                            <output class="number-of-tickets-display">You have chosen to buy 1 Ticket for this event.
+                            </output>
+                        </div>
+                        <div class="mb-3">
+                            <label for="payment-method" class="col-form-label">Choose Payment Method:</label>
+                            <select class="form-select" aria-label="Default select example"
+                                    name="payment-method" required>
+                                <option selected>------</option>
+                                <option value="mobile-money" selected>Mobile Money</option>
+                                <option value="card" disabled>VISA/Mastercard</option>
 
-                </select>
-          </div>
-            <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel Order</button>
-            <button type="submit" class="btn btn-primary">Continue To Checkout</button>
-      </div>
-        </form>
-      </div>
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel Order
+                            </button>
+                            <button type="submit" class="btn btn-primary">Continue To Checkout</button>
+                        </div>
+                    </form>
+                </div>
 
+            </div>
+        </div>
     </div>
-  </div>
-</div>
-{% endblock %}
+{% endblock %}</div>
 <script>
 </script>
 </body>
