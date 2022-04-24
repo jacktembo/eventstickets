@@ -50,7 +50,8 @@
       }
 
       .navbar-brand img {
-        display: none;
+        height: 4rem;
+        width: fit-content;
       }
     }
 
@@ -60,10 +61,13 @@
         height: 80%;
       }
 
-      .navbar-brand strong {
-        display: none;
+      .navbar-brand strong img{
+          width: fit-content !important;
+          height: 4.2rem !important;
+        {#display: none;#}
       }
     }
+
   </style>
 
   {% block stylesheet %}{% endblock %}
@@ -71,11 +75,8 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'index' %}"
-          ><strong>ALL1ZED TICKETS</strong
-          ><img
-            src="{% static 'assets/images/all1zed-logo.png' %}"
-            alt="All1Zed Tcikets"
-        /></a>
+          ><strong><img src="https://tickets.all1zed.com/images/all1zed-tickets.svg" alt="All1Zed Tickets" class="the-main-logo"></strong
+          ></a>
         <button
           class="navbar-toggler"
           type="button"
@@ -92,14 +93,6 @@
             class="navbar-nav me-auto my-2 my-lg-0"
             style="--bs-scroll-height: 100px"
           >
-            <li class="nav-item">
-              <a
-                class="nav-link active"
-                aria-current="page"
-                href="{% url 'index' %}"
-                >Home</a
-              >
-            </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Browse Events</a>
             </li>

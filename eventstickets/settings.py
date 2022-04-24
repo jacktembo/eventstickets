@@ -95,16 +95,16 @@ dev_db = {
 }
 prod_db = {
     'default': {
-        'NAME': 'events',
+        'NAME': 'allzedco_events',
         'ENGINE': 'mysql.connector.django',
-        'USER': 'root',
-        'PASSWORD': '30970084',
+        'USER': 'allzedco_root',
+        'PASSWORD': 'Zambia2022!',
         'OPTIONS': {
           'autocommit': True,
         },
     }
 }
-DATABASES = dev_db
+DATABASES = prod_db
 
 
 # Password validation
