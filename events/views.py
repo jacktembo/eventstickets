@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect, get_object_or_404, get_list_or_404
 from django.urls import reverse
 
+from internal.models import TermsAndConditions
 from .models import Event, EventTicket, SliderImage, All1ZedEventsCommission
 from django.db.models import Avg, Count, Min, Sum
 from datetime import datetime, date, timedelta, time
@@ -297,3 +298,11 @@ def payment_waiting(request):
 
 def payment_success(request):
     return render(request, 'payment_success.html')
+
+
+def terms(request):
+    terms = TermsAndConditions.objects.all().first()
+    context = {
+        'terms': terms
+    }
+    return render(request, 'terms_and_conditions.html', context)

@@ -49,7 +49,7 @@ def is_active_session(response):
         return False
 
 
-session_uuid = "571613a0-1e6e-4bdd-8264-55ddc5c33bfc"
+session_uuid = 'dc0fc215-d70e-4ebe-aaf6-fb085b823790'
 
 data = {
     "session_uuid": session_uuid
@@ -164,7 +164,7 @@ def nfs_cash_in(phone_number, amount):
     del data['amount']
     del data['reference']
     nfs_cash_in_confirm = requests.post(base_url + 'nfsCashInConfirm', data=json.dumps(data), headers=headers)
-    return  nfs_cash_in_confirm.json()
+    return nfs_cash_in_confirm.json()
 
 
 def nfs_cash_out(phone_number, amount):

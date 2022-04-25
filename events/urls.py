@@ -27,7 +27,8 @@ urlpatterns = [
     path('<int:event_id>/tickets/view', views.tickets_list, name='tickets-view'),
     path('<int:event_id>/tickets/download', views.TicketsListView.as_view(), name='tickets-download'),
     path('payment-success', views.payment_success, name='payment-success'),
-    path('generate', views.generate_pdf_ticket)
+    path('generate', views.generate_pdf_ticket),
+    path('terms', views.terms, name='terms'),
 ]
 if settings.DEBUG or settings.DEBUG == False:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

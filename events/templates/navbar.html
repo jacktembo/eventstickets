@@ -105,26 +105,21 @@
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                Events
+                Ts & Cs
               </a>
               <ul
                 class="dropdown-menu"
                 aria-labelledby="navbarScrollingDropdown"
               >
-                <li><a class="dropdown-item" href="#">Pricing</a></li>
-                <li><a class="dropdown-item" href="#">Features</a></li>
-                <li>
-                  <hr class="dropdown-divider" />
-                </li>
-                <li>
-                  <a class="dropdown-item" href="#">How It Works</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="#">Help Center</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="#">Create Event</a>
-                </li>
+                {% if request.user.is_staff %}
+                <li><a class="dropdown-item" href="{% url 'terms' %}">Buyer Ts & Cs</a></li>
+                <li><a class="dropdown-item" href="{% url 'terms' %}#event">Event Owner Ts & Cs</a></li>
+                {% endif %}
+              {% if request.user.is_anonymous %}
+                <li><a class="dropdown-item" href="{% url 'terms' %}">Buyer Ts & Cs</a></li>
+              {% endif %}
+
+                
               </ul>
             </li>
             {% if request.user.is_authenticated %}

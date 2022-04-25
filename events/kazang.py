@@ -69,7 +69,7 @@ session_uuid = get_or_create_session_uuid()
 
 
 def get_balance():
-    return product_list().get('balance', None)
+    return auth_client()['balance']
 
 
 def is_session_active(response):
@@ -118,10 +118,12 @@ def airtel_pay_payment(phone_number: str, amount):
     data['amount'] = amount
     data['request_reference'] = code
     r = requests.post(base_url + "airtelPayPayment", data=json.dumps(data), headers=headers)
+    assert r.json()['response_code'] == '0'
     confirmation_number = r.json().get('confirmation_number', False)
     data['confirmation_number'] = confirmation_number
     data['request_reference'] = code2
     confirm = requests.post(base_url + "airtelPayPaymentConfirm", data=json.dumps(data), headers=headers)
+    assert confirm.json()['response_code'] == '0'
     return confirm.json()
 
 
@@ -135,9 +137,10 @@ def airtel_pay_query(phone_number, amount, airtel_reference):
     data['wallet_msisdn'] = phone_number
     data['amount'] = amount
     airtel_pay_query = requests.post(base_url + "airtelPayQuery", data=json.dumps(data), headers=headers)
+    assert airtel_pay_query.json()['response_code'] == '0'
     data['confirmation_number'] = airtel_pay_query.json().get('confirmation_number', False)
     airtel_pay_query_confirm = requests.post(base_url + "airtelPayQueryConfirm", data=json.dumps(data), headers=headers)
-
+    assert airtel_pay_query.json()['response_code'] == '0'
     return airtel_pay_query_confirm.json()
 
 def zamtel_money_pay(phone_number: str, amount):
@@ -154,6 +157,7 @@ def zamtel_money_pay(phone_number: str, amount):
     data['amount'] = amount
     data['product_id'] = find_product_from_method_name('zamtelMoneyPay')['product_id']
     zamtel_money_pay = requests.post(base_url + 'zamtelMoneyPay', data=json.dumps(data), headers=headers)
+    assert zamtel_money_pay.json()['response_code'] == '0'
     return zamtel_money_pay.json()
 
 
@@ -167,6 +171,7 @@ def zamtel_money_pay_confirm(phone_number, amount, confirmation_number):
     data['msisdn'] = phone_number
     data['amount'] = amount
     zamtel_pay_confirmation = requests.post(base_url + 'zamtelMoneyPayConfirm', data=json.dumps(data), headers=headers)
+    assert zamtel_pay_confirmation == '0'
     return zamtel_pay_confirmation.json()
 
 
@@ -175,9 +180,11 @@ def mtn_debit(phone_number: str, amount: float):
     data['amount'] = amount
     data['product_id'] = find_product_from_method_name('mtnDebit')['product_id']
     r = requests.post(base_url + 'mtnDebit', data=json.dumps(data), headers=headers)
+    assert r.json()['response_code'] == '0'
     data['supplier_transaction_id'] = r.json().get('supplier_transaction_id', None)
     data['product_id'] = find_product_from_method_name('mtnDebitApproval')['product_id']
     approval = requests.post(base_url + 'mtnDebitApproval', data=json.dumps(data), headers=headers)
+    assert approval.json()['response_code'] == '0'
     data['confirmation_number'] = approval.json().get('confirmation_number', None)
     approval_confirm = requests.post(base_url + 'mtnDebitApprovalConfirm', data=json.dumps(data), headers=headers)
     return approval.json()
@@ -240,7 +247,7 @@ def airtel_cash_in(phone_number, amount):
     del data['amount']
     del data['reference']
     nfs_cash_in_confirm = requests.post(base_url + 'nfsCashInConfirm', data=json.dumps(data), headers=headers)
-    return  nfs_cash_in_confirm.json()
+    return nfs_cash_in_confirm.json()
 
 
 def nfs_cash_out(phone_number, amount):
@@ -276,12 +283,14 @@ def mtn_cash_in(phone_number, amount):
     data['product_id'] = find_product_from_method_name('mtnCashIn')['product_id']
     data['request_reference'] = code
     cash_in = requests.post(base_url + 'mtnCashIn', data=json.dumps(data), headers=headers)
+    assert cash_in.json()['response_code'] == '0'
     data['data_reference_number'] = cash_in.json().get('data_reference_number', False)
     data['request_reference'] = code2
     data['data'] = phone_number
     del data['receiving_msisdn']
     del data['amount']
     cash_in_confirm = requests.post(base_url + 'mtnCashInSubmitData', data=json.dumps(data), headers=headers)
+    assert cash_in_confirm.json()['response_code'] == '0'
     return cash_in_confirm.json()
 
 def zamtel_money_cash_in(phone_number, amount):

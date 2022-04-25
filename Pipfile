@@ -23,6 +23,7 @@ django-utils-six = "*"
 django-google-maps = "*"
 django-easy-maps = "*"
 googlemaps = "*"
+schedule = "*"
 
 [dev-packages]
 

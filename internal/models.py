@@ -11,10 +11,11 @@ class TermsAndConditions(models.Model):
     )
     privacy_policy = RichTextUploadingField(
         help_text= 'Describe how you shall maintain security on the information that users are proving to All1Zed '
-                   'Events Platform. '
+                   'Events Platform.', blank=True, null=True
     )
     terms_of_use = RichTextUploadingField(
-        help_text='By using All1Zed Events Platform, all stakeholders agree to your specific terms. Describe them here.'
+        help_text='By using All1Zed Events Platform, all stakeholders agree to your specific terms. Describe them here.',
+        blank=True, null=True
     )
 
 

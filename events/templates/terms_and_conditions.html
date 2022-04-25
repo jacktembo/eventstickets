@@ -1,3 +1,60 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}Ts & Cs | All1Zed Tickets{% endblock %}
+{% block stylesheet %}
+    <style>
+        .first-card {
+            margin-top: 7rem !important;
+        }
+
+        .heading {
+            text-decoration: underline;
+            color: #dc5624;
+            font-size: 150%;
+        }
+
+        html {
+            display: flex;
+            justify-content: center;
+
+        }
+
+        .card {
+            border: 1px solid green;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="card text-center first-card">
+        <div class="card-header">
+            <h1 class="heading">Buyer Terms and conditions</h1>
+        </div>
+        <div class="card-body">
+            {#    <h5 class="card-title">Buyer Terms And Conditions</h5>#}
+            <p class="card-text">
+                {{ terms.buyer_terms_and_conditions | safe }}
+            </p>
+        </div>
+        <div class="card-footer text-muted">
+            last updated {% now "jS F Y H:i" %}
+        </div>
+    </div>
+    <div>
+        {% if request.user.is_staff %}
+            <div class="card text-center" id="event">
+                <div class="card-header">
+                    <h1 class="heading">Event Organizer Terms and conditions</h1>
+                </div>
+                <div class="card-body">
+                    {#    <h5 class="card-title">Event Organizer Terms And Conditions</h5>#}
+                    <p class="card-text">
+                        {{ terms.event_organizer_terms_and_conditions | safe }}
+                    </p>
+                </div>
+                <div class="card-footer text-muted">
+                    last updated {% now "jS F Y H:i" %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
