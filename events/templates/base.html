@@ -226,8 +226,13 @@
                         <div class="single-cta">
                             <i class="far fa-envelope-open"></i>
                             <div class="cta-text">
-                                <a href=""><h4>Terms & Use Policy</h4></a>
-                                <a href=""><span>Tickets Terms and Conditions</span></a>
+                                {% if request.user.is_staff %}
+                                <a href="{% url 'terms' %}"><h4>Buyer Terms & Use Policy</h4></a>
+                                <a href="{% url 'terms' %}#event"><h4>Event Owner Terms & Use Policy</h4></a>
+                                {% endif %}
+                                {% if request.user.is_anonymous %}
+                                <a href="{% url 'terms' %}"><h4>Buyer Terms & Use Policy</h4></a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
