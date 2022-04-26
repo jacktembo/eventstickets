@@ -306,3 +306,11 @@ def terms(request):
         'terms': terms
     }
     return render(request, 'terms_and_conditions.html', context)
+
+
+def ticket_list_download(request):
+    events = Event.objects.filter(user=request.user)
+    context = {
+        'events': events
+    }
+    return render(request, 'download_ticket_numbers.html', context)

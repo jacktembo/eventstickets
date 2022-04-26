@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}
+Download Ticket List
+{% endblock %}
+{% block stylesheet %}
+    <style>
+    .card {
+        margin-top: 10rem;
+        margin-bottom: 2rem;
+        margin-right: 1rem;
+        margin-left: 1rem;
+        display: flex;
+        justify-content: center;
+        padding-left: 1rem;
+    }
+    h2 {
+        color: dodgerblue;
+        font-size: 120%;
+    }
+    </style>
+{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>Select an event to download tickets for.</h2>
+{% for event in events %}
+<div class="list-group">
+  <a href="{% url 'tickets-download' event_id=event.id %}" class="list-group-item list-group-item-action">{{ event.name }}</a>
+</div>
+{% endfor %}
+
+</div>
+{% endblock %}

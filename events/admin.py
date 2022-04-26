@@ -30,7 +30,7 @@ class EventAdmin(ModelAdmin):
         return qs.filter(user=request.user)
 
     list_display = [
-        'name', 'total_tickets_sold', 'vvip_tickets_sold', 'vip_tickets_sold',
+        'id', 'name', 'total_tickets_sold', 'vvip_tickets_sold', 'vip_tickets_sold',
         'general_tickets_sold', 'your_earnings', 'all1zed_earnings', 'total_sales',
     ]
     search_fields = ['name', 'description', 'venue', 'additional_information', 'organizer']

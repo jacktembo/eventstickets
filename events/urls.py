@@ -29,6 +29,7 @@ urlpatterns = [
     path('payment-success', views.payment_success, name='payment-success'),
     path('generate', views.generate_pdf_ticket),
     path('terms', views.terms, name='terms'),
+    path('ticket-list-download', views.ticket_list_download, name='ticket-list-download'),
 ]
 if settings.DEBUG or settings.DEBUG == False:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

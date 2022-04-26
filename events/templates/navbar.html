@@ -109,7 +109,7 @@
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                Ts & Cs
+                More
               </a>
               <ul
                 class="dropdown-menu"
@@ -118,6 +118,7 @@
                 {% if request.user.is_staff %}
                 <li><a class="dropdown-item" href="{% url 'terms' %}">Buyer Ts & Cs</a></li>
                 <li><a class="dropdown-item" href="{% url 'terms' %}#event">Event Owner Ts & Cs</a></li>
+                <li><a class="dropdown-item" href="{% url 'ticket-list-download' %}#event">Download Ticket List</a></li>
                 {% endif %}
               {% if request.user.is_anonymous %}
                 <li><a class="dropdown-item" href="{% url 'terms' %}">Buyer Ts & Cs</a></li>
