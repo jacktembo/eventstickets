@@ -34,14 +34,14 @@ Ticket Payment waiting
     Payment Confirmation
   </div>
 </div>
-{% endblock %}
 <script>
     const btn = document.getElementById("submit")
     function activateButton() {
       btn.disabled = true;
       setTimeout(()=>{
         btn.disabled = false;
-        console.log('Button Activated')}, 15000)
+        console.log('Button Activated')}, 20000)
     }
     activateButton()
 </script>
+{% endblock %}
