@@ -33,6 +33,9 @@ class EventAdmin(ModelAdmin):
         'id', 'name', 'total_tickets_sold', 'vvip_tickets_sold', 'vip_tickets_sold',
         'general_tickets_sold', 'your_earnings', 'all1zed_earnings', 'total_sales',
     ]
+    list_display_links = [
+        'name'
+    ]
     search_fields = ['name', 'description', 'venue', 'additional_information', 'organizer']
     list_per_page = 10
     search_help_text = 'Search Events'
