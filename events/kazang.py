@@ -423,3 +423,26 @@ def mobile_cash_in(phone_number, amount):
         return zamtel_cash_in(phone_number, amount)
     else:
         return 'Invalid phone number'
+
+
+
+def airtel_cash_out(phone_number, amount):
+    alphabet = string.digits
+    code = ''.join(secrets.choice(alphabet) for i in range(6))
+    code2 = ''.join(secrets.choice(alphabet) for i in range(6))
+    data = {
+        "session_uuid": session_uuid
+    }
+    data['product_id'] = '5309'
+    data['request_reference'] = code
+    data['reference'] = phone_number
+    data['amount'] = amount
+    cash_out = requests.post(base_url + 'nfsATMCashOut', data=json.dumps(data), headers=headers)
+    # data['data'] = '2020'
+    # data['data_reference_number'] = cash_out.json().get('data_reference_number', False)
+    # data['request_reference'] = code2
+    # del data['amount']
+    # del data['reference']
+    # cash_out_confirm = requests.post(base_url + 'nfsATMCashOutSubmitData', data=json.dumps(data), headers=headers)
+    # return cash_out_confirm.json()
+    return cash_out.json()
