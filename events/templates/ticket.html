@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-  {% load static %}
-  <head>
-    <meta charset="UTF-8" />
+{% load static %}
+<head>
+    <meta charset="UTF-8"/>
     <title>Event Ticket</title>
-  </head>
-  <style>
+</head>
+<style>
     * {
         font-weight: bold !important;
     }
+
     #invoice-POS {
         padding: 1rem;
         margin: 0 auto;
-        {#width: 80%;#}
-        border: 1px solid dodgerblue;
+    {#width: 80%;#} border: 1px solid dodgerblue;
         background: #FFF;
         height: fit-content;
     }
@@ -46,7 +46,7 @@
 
     #invoice-POS #top, #invoice-POS #mid, #invoice-POS #bot {
         /* Targets all id with 'col-' */
-        border-bottom: 1px solid #EEE;
+        {#border-bottom: 1px solid #EEE;#}
     }
 
     #invoice-POS #top {
@@ -54,7 +54,7 @@
     }
 
     #invoice-POS #mid {
-        {#min-height: 80px;#}
+    {#min-height: 80px;#}
     }
 
     #invoice-POS #bot {
@@ -126,34 +126,37 @@
         margin-left: 5mm !important;
     }
 
-
-
-
-
-
-
-
     body {
         display: flex;
         flex-direction: column;
         justify-content: center;
     }
+
     .qr {
         margin: 1rem;
         width: 180px;
         height: 180px;
     }
+
     .qrcode {
         display: flex;
         justify-content: center;
     }
+
     .legal {
         font-size: 50% !important;
     }
+
     .event-img {
         width: 100%;
         height: 200px;
     }
+
+    .logo {
+        display: flex;
+        justify-content: center;
+    }
+
     .logo img {
         width: fit-content;
         height: 2.5rem;
@@ -163,126 +166,128 @@
     .main-img img {
         width: 100%;
     }
+
     .entry-ticket {
         color: dodgerblue;
     }
-  </style>
-  <body>
-    <div id="invoice-POS">
-      <div class="logo">
+</style>
+<body>
+<div id="invoice-POS">
+    <div class="main-img">
         <img
-          src="https://tickets.all1zed.com/images/all1zed-tickets.svg"
-          alt="all1zed-logo"
+                src="{{ banner_image_url }}"
+                alt=""
+                class="event-img"
         />
-      </div>
-      <div class="main-img">
-        <img
-          src="{{ banner_image.url}}"
-          alt=""
-          class="event-img"
-        />
-      </div>
+    </div>
 
-      <div id="mid">
+    <div id="mid">
         <div class="info">
-          <h2 class="entry-ticket">{{ event_name }}</h2>
+            <h2 class="entry-ticket">{{ event_name }}</h2>
         </div>
-      </div>
-      <!--End Invoice Mid-->
+    </div>
+    <!--End Invoice Mid-->
 
-      <div id="bot">
+    <div id="bot">
         <div id="table">
-          <table>
-            <tr class="tabletitle">
-              <td class="item"><h2>INFO</h2></td>
-              <td class="Rate"><h2>VALUE</h2></td>
-            </tr>
-            <tr class="service">
-              <td class="tableitem"><p class="itemtext">Event</p></td>
-              <td class="tableitem">
-                <p class="itemtext">{{ event_name }}</p>
-              </td>
-            </tr>
+            <table>
+                <tr class="tabletitle">
+                    <td class="item"><h2>INFO</h2></td>
+                    <td class="Rate"><h2>VALUE</h2></td>
+                </tr>
+                <tr class="service">
+                    <td class="tableitem"><p class="itemtext">Event</p></td>
+                    <td class="tableitem">
+                        <p class="itemtext">{{ event_name }}</p>
+                    </td>
+                </tr>
 
-            <tr class="service">
-              <td class="tableitem"><p class="itemtext">Ticket Number</p></td>
-              <td class="tableitem">
-                <p class="itemtext">{{ ticket_number }}</p>
-              </td>
-            </tr>
+                <tr class="service">
+                    <td class="tableitem"><p class="itemtext">Ticket Number</p></td>
+                    <td class="tableitem">
+                        <p class="itemtext">{{ ticket_number }}</p>
+                    </td>
+                </tr>
 
-            <tr class="service">
-              <td class="tableitem"><p class="itemtext">Ticket Type</p></td>
-              <td class="tableitem">
-                <p class="itemtext">{{ ticket_type }}</p>
-              </td>
-            </tr>
+                <tr class="service">
+                    <td class="tableitem"><p class="itemtext">Ticket Type</p></td>
+                    <td class="tableitem">
+                        <p class="itemtext">{{ ticket_type }}</p>
+                    </td>
+                </tr>
 
-            <tr class="service">
-              <td class="tableitem"><p class="itemtext">Ticket Price</p></td>
-              <td class="tableitem">
-                <p class="itemtext">K{{ ticket_price }}</p>
-              </td>
-            </tr>
-            <tr class="service">
-              <td class="tableitem"><p class="itemtext">City</p></td>
-              <td class="tableitem"><p class="itemtext">{{ city }}</p></td>
-            </tr>
-            <tr class="service">
-              <td class="tableitem"><p class="itemtext">Venue</p></td>
-              <td class="tableitem"><p class="itemtext">{{ venue }}</p></td>
-            </tr>
+                <tr class="service">
+                    <td class="tableitem"><p class="itemtext">Ticket Price</p></td>
+                    <td class="tableitem">
+                        <p class="itemtext">K{{ ticket_price }}</p>
+                    </td>
+                </tr>
+                <tr class="service">
+                    <td class="tableitem"><p class="itemtext">City</p></td>
+                    <td class="tableitem"><p class="itemtext">{{ city }}</p></td>
+                </tr>
+                <tr class="service">
+                    <td class="tableitem"><p class="itemtext">Venue</p></td>
+                    <td class="tableitem"><p class="itemtext">{{ venue }}</p></td>
+                </tr>
 
-            <tr class="service">
-              <td class="tableitem"><p class="itemtext">Event Date</p></td>
-              <td class="tableitem">
-                <p class="itemtext">{{ start_date }}</p>
-              </td>
-            </tr>
-            <tr class="service">
-              <td class="tableitem"><p class="itemtext">Time</p></td>
-              <td class="tableitem">
-                <p class="itemtext">{{ start_time }} - {{ end_time }}</p>
-              </td>
-            </tr>
-          </table>
+                <tr class="service">
+                    <td class="tableitem"><p class="itemtext">Event Date</p></td>
+                    <td class="tableitem">
+                        <p class="itemtext">{{ start_date }}</p>
+                    </td>
+                </tr>
+                <tr class="service">
+                    <td class="tableitem"><p class="itemtext">Time</p></td>
+                    <td class="tableitem">
+                        <p class="itemtext">{{ start_time }} - {{ end_time }}</p>
+                    </td>
+                </tr>
+            </table>
         </div>
         <!--End Table-->
         <div class="qrcode">
-          <img
-            src="{{ qrcode_image}}"
-            alt=""
-            class="qr"
-          />
+            <img
+                    src="{{ qrcode_image }}"
+                    alt=""
+                    class="qr"
+            />
+
         </div>
         <div id="legalcopy">
-          <p class="legal">
-            <strong>
-              </strong>
-          </p>
+            <p class="legal">
+                <strong>
+                </strong>
+            </p>
         </div>
-      </div>
-      <!--End InvoiceBot-->
     </div>
-    <!--End Invoice-->
-    <p>
-      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
-      <script type="text/javascript">
+    <div class="logo">
+        <img
+                src="https://tickets.all1zed.com/images/all1zed-tickets.svg"
+                alt="all1zed-logo"
+        />
+    </div>
+    <!--End InvoiceBot-->
+</div>
+<!--End Invoice-->
+<p>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+    <script type="text/javascript">
         var doc = new jsPDF();
         var specialElementHandlers = {
-          "#editor": function (element, renderer) {
-            return true;
-          },
+            "#editor": function (element, renderer) {
+                return true;
+            },
         };
 
         $("#generatePDF").click(function () {
-          doc.fromHTML($("#invoice-POS").html(), 15, 15, {
-            elementHandlers: specialElementHandlers,
-          });
-          doc.save("sample_file.pdf");
+            doc.fromHTML($("#invoice-POS").html(), 15, 15, {
+                elementHandlers: specialElementHandlers,
+            });
+            doc.save("sample_file.pdf");
         });
-      </script>
-    </p>
-  </body>
+    </script>
+</p>
+</body>
 </html>

@@ -21,6 +21,16 @@ from . import phone_numbers
 percentage_commission = All1ZedEventsCommission.objects.first().percentage_commission
 
 
+def mobile_cash_in(phone_number, amount):
+    if phone_numbers.get_network(phone_number) == 'airtel':
+        return kazang.airtel_cash_in(phone_number, amount)
+    elif phone_numbers.get_network(phone_number) == 'mtn':
+        return kazang.mtn_cash_in(phone_number, amount)
+    elif phone_numbers.get_network(phone_number) == 'zamtel':
+        return kazang.zamtel_cash_in(phone_number, amount)
+    else:
+        return 'Invalid phone number'
+
 
 def index(request):
     """
@@ -206,7 +216,7 @@ def payment_approval(request, event_id):
             confirmation_number = approval['confirmation_number']
             debit_approval_confirm = kazang.mtn_debit_approval_confirm(client_phone_number, charge, confirmation_number)
             if debit_approval_confirm['response_code'] == '0':
-                kazang.mobile_cash_in(event_mobile_money_number, deposit)
+                mobile_cash_in(event_mobile_money_number, deposit)
                 ticket.save()
                 message = f"Dear {client_full_name}, Your {event.name} Ticket Number is {ticket.ticket_number}. Download your ticket at https://events.all1zed.com/{ticket.ticket_number}/download. Thank you for using All1Zed Tickets."
                 sms.send_sms(client_phone_number, message)
@@ -234,7 +244,7 @@ class DownloadView(WeasyTemplateResponseMixin, TemplateView):
         event = ticket.event
         qrcode_image = f'https://api.qrserver.com/v1/create-qr-code/?data={ticket_number}&size=200x200&format=svg'
         context = {
-            'ticket': ticket, 'banner_image': event.banner_image, 'qrcode_image': qrcode_image,
+            'ticket': ticket, 'banner_image_url': event.banner_image.url, 'qrcode_image': qrcode_image,
             'event_name': ticket.event.name, 'ticket_number': ticket_number,
             'ticket_type': ticket.type, 'ticket_price': ticket.ticket_price,
             'city': ticket.event.town, 'venue': ticket.event.venue,
