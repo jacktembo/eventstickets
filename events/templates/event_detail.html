@@ -22,9 +22,11 @@
             box-sizing: border-box;
             background-color: #f5f1f1;
         }
+
         .main-section {
             margin-top: 3rem;
         }
+
         .event-name-wrap {
             margin-top: 5rem !important;
         }
@@ -33,6 +35,7 @@
             color: white;
             background-color: dodgerblue;
         }
+
         .event-image {
             width: 100%;
             height: 60vw;
@@ -139,16 +142,20 @@
             padding-left: 0.5rem;;
 
         }
+
         .btn-primary {
             background-color: orangered !important;
             border-color: orangered;
         }
+
         .continue-checkout {
             z-index: 9999999999999999999999999999999;
         }
+
         .number-of-tickets-display {
             color: dodgerblue;
         }
+
         .event-wrap {
             font-size: 100%;
             white-space: nowrap;
@@ -210,14 +217,13 @@
                 margin-bottom: 1rem;
             }
 
-            {#.event-wrap-info {#}
-            {#    width: 50%;#}
-            {#}#}
+        {#.event-wrap-info {#}
             .long-and-graphics {
                 display: flex;
                 justify-content: space-around;
                 margin-bottom: 5rem;
             }
+
             .google-map iframe {
                 width: 40rem !important;
                 position: relative;
@@ -226,13 +232,15 @@
                 border: 1px solid dodgerblue;
                 margin-top: 1rem;
             }
+
             .long-text {
                 border-bottom: 1px solid dodgerblue;
             }
-            }
-
-
-
+        }
+        @media screen and (max-width: 768px) {
+            iframe {
+                width: 100vw !important;
+        }}
 
     </style>
 {% endblock %}
@@ -304,7 +312,7 @@
         <div class="google-map graphics">
             <div style="width: 700px;position: relative;">
                 <iframe
-                        width="400"
+                        width="300"
                         height="250"
                         frameborder="0" style="border:0"
                         referrerpolicy="no-referrer-when-downgrade"
@@ -361,14 +369,14 @@
                                 </option>
                             </select>
                         </div>
-{#                        <div class="mb-3">#}
-{#                            <label for="number-of-tickets" class="form-label">Number Of Tickets To Buy:</label>#}
-{#                            <input type="range" class="form-range" min="1" max="10" value="1" id="number-of-tickets"#}
-{#                                   name="number-of-tickets"#}
-{#                                   oninput="this.nextElementSibling.value = 'You have chosen to buy ' + this.value + ' Ticket(s) for this Event'">#}
-{#                            <output class="number-of-tickets-display">You have chosen to buy 1 Ticket for this event.#}
-{#                            </output>#}
-{#                        </div>#}
+                        {#                        <div class="mb-3">#}
+                        {#                            <label for="number-of-tickets" class="form-label">Number Of Tickets To Buy:</label>#}
+                        {#                            <input type="range" class="form-range" min="1" max="10" value="1" id="number-of-tickets"#}
+                        {#                                   name="number-of-tickets"#}
+                        {#                                   oninput="this.nextElementSibling.value = 'You have chosen to buy ' + this.value + ' Ticket(s) for this Event'">#}
+                        {#                            <output class="number-of-tickets-display">You have chosen to buy 1 Ticket for this event.#}
+                        {#                            </output>#}
+                        {#                        </div>#}
                         <div class="mb-3">
                             <label for="payment-method" class="col-form-label">Choose Payment Method:</label>
                             <select class="form-select" aria-label="Default select example"
