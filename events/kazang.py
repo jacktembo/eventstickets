@@ -2,6 +2,7 @@ import json
 import secrets
 import string
 from datetime import datetime
+from time import sleep
 
 import requests
 
@@ -158,14 +159,7 @@ def zamtel_money_pay(phone_number: str, amount):
     data['product_id'] = find_product_from_method_name('zamtelMoneyPay')['product_id']
     zamtel_money_pay = requests.post(base_url + 'zamtelMoneyPay', data=json.dumps(data), headers=headers)
     assert zamtel_money_pay.json()['response_code'] == '0'
-    return zamtel_money_pay.json()
-
-
-def zamtel_money_pay_confirm(phone_number, amount, confirmation_number):
-    alphabet = string.digits
-    code = ''.join(secrets.choice(alphabet) for i in range(6))
-    code2 = ''.join(secrets.choice(alphabet) for i in range(6))
-    data['request_reference'] = code
+    confirmation_number = zamtel_money_pay.json().get('confirmation_number', False)
     data['confirmation_number'] = confirmation_number
     data['request_reference'] = code2
     data['msisdn'] = phone_number
@@ -176,18 +170,45 @@ def zamtel_money_pay_confirm(phone_number, amount, confirmation_number):
 
 
 def mtn_debit(phone_number: str, amount: float):
+    alphabet = string.digits
+    code = ''.join(secrets.choice(alphabet) for i in range(6))
+    code2 = ''.join(secrets.choice(alphabet) for i in range(6))
+    code3 = ''.join(secrets.choice(alphabet) for i in range(6))
+    data = {
+        "session_uuid": session_uuid
+    }
     data['wallet_msisdn'] = phone_number
     data['amount'] = amount
     data['product_id'] = find_product_from_method_name('mtnDebit')['product_id']
+    data['request_reference'] = code
     r = requests.post(base_url + 'mtnDebit', data=json.dumps(data), headers=headers)
-    assert r.json()['response_code'] == '0'
-    data['supplier_transaction_id'] = r.json().get('supplier_transaction_id', None)
+    return r.json()
+
+
+def mtn_debit_approval(phone_number, amount, supplier_transaction_id):
+    data = {
+        'session_uuid': session_uuid
+    }
     data['product_id'] = find_product_from_method_name('mtnDebitApproval')['product_id']
-    approval = requests.post(base_url + 'mtnDebitApproval', data=json.dumps(data), headers=headers)
-    assert approval.json()['response_code'] == '0'
-    data['confirmation_number'] = approval.json().get('confirmation_number', None)
-    approval_confirm = requests.post(base_url + 'mtnDebitApprovalConfirm', data=json.dumps(data), headers=headers)
-    return approval.json()
+    data['amount'] = amount
+    data['wallet_msisdn'] = phone_number
+    data['supplier_transaction_id'] = supplier_transaction_id
+    debit_approval = requests.post(base_url + 'mtnDebitApproval', data=json.dumps(data), headers=headers)
+    return debit_approval.json()
+
+
+def mtn_debit_approval_confirm(phone_number, amount, confirmation_number):
+    data = {
+        'session_uuid': session_uuid
+    }
+    data['msisdn'] = phone_number
+    data['product_id'] = find_product_from_method_name('mtnDebitApproval')['product_id']
+    data['amount'] = amount
+    data['confirmation_number'] = confirmation_number
+    debit_approval_confirm = requests.post(base_url + 'mtnDebitApprovalConfirm', data=json.dumps(data), headers=headers)
+    return debit_approval_confirm.json()
+
+
 
 
 def mtn_debit_confirm(phone_number, amount, confirmation_number):
@@ -218,6 +239,25 @@ def nfs_cash_in(phone_number, amount):
         "session_uuid": session_uuid
     }
     data['product_id'] = '1648'
+    data['request_reference'] = code
+    data['reference'] = phone_number
+    data['amount'] = amount
+    cash_in = requests.post(base_url + 'nfsCashIn', data=json.dumps(data), headers=headers)
+    data['confirmation_number'] = cash_in.json().get('confirmation_number', False)
+    data['request_reference'] = code2
+    del data['amount']
+    del data['reference']
+    nfs_cash_in_confirm = requests.post(base_url + 'nfsCashInConfirm', data=json.dumps(data), headers=headers)
+    return  nfs_cash_in_confirm.json()
+
+def zamtel_cash_in(phone_number, amount):
+    alphabet = string.digits
+    code = ''.join(secrets.choice(alphabet) for i in range(6))
+    code2 = ''.join(secrets.choice(alphabet) for i in range(6))
+    data = {
+        "session_uuid": session_uuid
+    }
+    data['product_id'] = '5305'
     data['request_reference'] = code
     data['reference'] = phone_number
     data['amount'] = amount
@@ -291,25 +331,6 @@ def mtn_cash_in(phone_number, amount):
     del data['amount']
     cash_in_confirm = requests.post(base_url + 'mtnCashInSubmitData', data=json.dumps(data), headers=headers)
     assert cash_in_confirm.json()['response_code'] == '0'
-    return cash_in_confirm.json()
-
-def zamtel_money_cash_in(phone_number, amount):
-    alphabet = string.digits
-    code = ''.join(secrets.choice(alphabet) for i in range(6))
-    code2 = ''.join(secrets.choice(alphabet) for i in range(6))
-    data = {
-        "session_uuid": session_uuid
-    }
-    data['product_id'] = find_product_from_method_name('zamtelMoneyCashIn')['product_id']
-    data['request_reference'] = code
-    data['msisdn'] = phone_number
-    data['amount'] = amount
-    cash_in = requests.post(base_url + 'zamtelMoneyCashIn', data=json.dumps(data), headers=headers)
-    data['confirmation_number'] = cash_in.json().get('confirmation_number', False)
-    data['request_reference'] = code2
-    del data['msisdn']
-    del data['amount']
-    cash_in_confirm = requests.post(base_url + 'zamtelMoneyCashInConfirm', data=json.dumps(data), headers=headers)
     return cash_in_confirm.json()
 
 

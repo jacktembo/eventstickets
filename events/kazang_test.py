@@ -49,7 +49,7 @@ def is_active_session(response):
         return False
 
 
-session_uuid = 'dc0fc215-d70e-4ebe-aaf6-fb085b823790'
+session_uuid = 'dd18a959-c494-4bde-b39e-ae2479e0098d'
 
 data = {
     "session_uuid": session_uuid
@@ -111,7 +111,7 @@ def airtel_pay_query():
     return airtel_pay_query_confirm.json()
 
 
-def zamtelMoneyPay(phone_number: str, amount):
+def zamtel_money_pay(phone_number: str, amount):
     data = {
         "session_uuid": session_uuid
     }

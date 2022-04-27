@@ -17,6 +17,21 @@ from django_weasyprint.views import WeasyTemplateResponse
 from . import sms
 from . import kazang
 from . import phone_numbers
+
+percentage_commission = All1ZedEventsCommission.objects.first().percentage_commission
+
+
+def cash_in(phone_number, amount):
+    if phone_numbers.get_network(phone_number) == 'airtel':
+        return kazang.airtel_cash_in(phone_number, amount)
+    elif phone_numbers.get_network(phone_number) == 'mtn':
+        return kazang.mtn_cash_in(phone_number, amount)
+    elif phone_numbers.get_network(phone_number) == 'zamtel':
+        return kazang.zamtel_cash_in(phone_number, amount)
+    else:
+        return 'Invalid phone number'
+
+
 def index(request):
     """
     Featured events designates the four (4) featured events for a specific day or week or month.
@@ -79,6 +94,7 @@ def mobile_payment(request, event_id):
         charge = (float(ticket_price) * 100) + (0.02 * float(ticket_price) * 100)
         client_full_name = request.POST.get('client-full-name', False)
         client_phone_number = request.POST.get('client-phone-number')
+        event_mobile_number = event.mobile_money_number
         ticket = EventTicket(event=event, client_full_name=client_full_name,
                              type=ticket_type, user=event.user,
                              client_phone_number=client_phone_number)
@@ -92,14 +108,62 @@ def mobile_payment(request, event_id):
             }
             return render(request, 'payment_waiting.html', context)
         elif phone_numbers.get_network(client_phone_number) == 'mtn':
-            pass
+            pay = kazang.mtn_debit(client_phone_number, charge)
+            context = {
+                'ticket_type': ticket_type, 'client_full_name': client_full_name,
+                'client_phone_number': client_phone_number, 'event_id': event_id,
+                'ticket_price': ticket_price, 'event': event,
+                'reference_number': pay.get('supplier_transaction_id', False),
+                'amount': charge
+            }
+            return render(request, 'payment_waiting.html', context)
+
         elif phone_numbers.get_network(client_phone_number) == 'zamtel':
-            pass
+            deposit = (float(ticket_price) * 100) - (float(ticket_price * 100) * (float(percentage_commission) / 100))
+            pay = kazang.zamtel_money_pay(client_phone_number, charge)
+            context = {
+                'ticket_type': ticket_type, 'client_full_name': client_full_name,
+                'client_phone_number': client_phone_number, 'event_id': event_id,
+                'ticket_price': ticket_price, 'event': event, 'reference_number': pay.get('airtel_reference', False)
+            }
+            if pay.get('response_code', False) == '0':
+                if phone_numbers.get_network(event_mobile_number) == 'zamtel':
+                    kazang.zamtel_cash_in(event_mobile_number, deposit)
+                    ticket.save()
+                    message = f"Dear {client_full_name}, Your {event.name} Ticket Number is {ticket.ticket_number}. Download your ticket at https://events.all1zed.com/{ticket.ticket_number}/download. Thank you for using All1Zed Tickets."
+                    sms.send_sms(client_phone_number, message)
+                    context = {
+                        'ticket_number': ticket.ticket_number, 'client_full_name': client_full_name,
+                        'ticket_price': ticket_price, 'event': event
+                    }
+                    return render(request, 'payment_success.html', context)
+                elif phone_numbers.get_network(event_mobile_number) == 'airtel':
+                    kazang.airtel_cash_in(event_mobile_number, deposit)
+                    ticket.save()
+                    message = f"Dear {client_full_name}, Your {event.name} Ticket Number is {ticket.ticket_number}. Download your ticket at https://events.all1zed.com/{ticket.ticket_number}/download. Thank you for using All1Zed Tickets."
+                    sms.send_sms(client_phone_number, message)
+                    context = {
+                        'ticket_number': ticket.ticket_number, 'client_full_name': client_full_name,
+                        'ticket_price': ticket_price, 'event': event
+                    }
+                    return render(request, 'payment_success.html', context)
+                elif phone_numbers.get_network(event_mobile_number) == 'mtn':
+                    kazang.mtn_cash_in(event_mobile_number, deposit)
+                    ticket.save()
+                    message = f"Dear {client_full_name}, Your {event.name} Ticket Number is {ticket.ticket_number}. Download your ticket at https://events.all1zed.com/{ticket.ticket_number}/download. Thank you for using All1Zed Tickets."
+                    sms.send_sms(client_phone_number, message)
+                    context = {
+                        'ticket_number': ticket.ticket_number, 'client_full_name': client_full_name,
+                        'ticket_price': ticket_price, 'event': event
+                    }
+                    return render(request, 'payment_success.html', context)
+            else:
+                return HttpResponse(pay['response_message'])
         else:
-            return HttpResponse('invalid phone nnumber')
+            return HttpResponse('invalid phone number')
+
 
 def payment_approval(request, event_id):
-    percentage_commission = All1ZedEventsCommission.objects.first().percentage_commission
     reference_number = request.POST.get('reference-number', False)
     event_id = request.POST.get('event_id', False)
     event = get_object_or_404(Event, pk=int(event_id))
@@ -139,8 +203,20 @@ def payment_approval(request, event_id):
                     'ticket_price': ticket_price, 'event': event
                 }
                 return render(request, 'payment_success.html', context)
-            elif phone_numbers.get_network(event_mobile_money_number) == 'zamtel':
-                kazang.zamtel_money_cash_in(event_mobile_money_number, deposit)
+
+            else:
+                return HttpResponse('Event Owner phone number is invalid.')
+
+    elif phone_numbers.get_network(client_phone_number) == 'mtn':
+        deposit = (float(ticket_price) * 100) - (float(ticket_price * 100) * (float(percentage_commission) / 100))
+        reference_number = request.POST.get('reference-number', False)
+        charge = (float(ticket_price) * 100) + (0.02 * float(ticket_price) * 100)
+        approval = kazang.mtn_debit_approval(client_phone_number, charge, reference_number)
+        if approval['response_code'] == '0':
+            confirmation_number = approval['confirmation_number']
+            debit_approval_confirm = kazang.mtn_debit_approval_confirm(client_phone_number, charge, confirmation_number)
+            if debit_approval_confirm['response_code'] == '0':
+                cash_in(event_mobile_money_number, deposit)
                 ticket.save()
                 message = f"Dear {client_full_name}, Your {event.name} Ticket Number is {ticket.ticket_number}. Download your ticket at https://events.all1zed.com/{ticket.ticket_number}/download. Thank you for using All1Zed Tickets."
                 sms.send_sms(client_phone_number, message)
@@ -148,12 +224,12 @@ def payment_approval(request, event_id):
                     'ticket_number': ticket.ticket_number, 'client_full_name': client_full_name,
                     'ticket_price': ticket_price, 'event': event
                 }
-
                 return render(request, 'payment_success.html', context)
             else:
-                return HttpResponse('Event Owner phone number is invalid.')
+                return HttpResponse('There was a proplem processing your transaction. Please try again.')
         else:
-            return HttpResponse(r['response_message'])
+            return HttpResponse('Transaction declined.')
+
 
 @pdf_decorator()
 def generate_pdf_ticket(request):
@@ -173,7 +249,8 @@ class DownloadView(WeasyTemplateResponseMixin, TemplateView):
             'ticket_type': ticket.type, 'ticket_price': ticket.ticket_price,
             'city': ticket.event.town, 'venue': ticket.event.venue,
             'start_date': ticket.event.date_starting, 'end_date': ticket.event.date_ending,
-            'start_time': ticket.event.time_starting.strftime("%H:%M hrs"), 'end_time': ticket.event.time_ending.strftime("%H:%M hrs"),
+            'start_time': ticket.event.time_starting.strftime("%H:%M hrs"),
+            'end_time': ticket.event.time_ending.strftime("%H:%M hrs"),
             'client_name': ticket.client_full_name, 'client_phone_number': ticket.client_phone_number,
 
         }
@@ -183,7 +260,6 @@ class DownloadView(WeasyTemplateResponseMixin, TemplateView):
 
     def get_pdf_filename(self):
         return 'All1Zed-ticket-{at}.pdf'
-
 
 
 def scan(request):
