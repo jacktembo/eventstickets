@@ -166,7 +166,7 @@ def zamtel_money_pay(phone_number: str, amount):
     data['msisdn'] = phone_number
     data['amount'] = amount
     zamtel_pay_confirmation = requests.post(base_url + 'zamtelMoneyPayConfirm', data=json.dumps(data), headers=headers)
-    assert zamtel_pay_confirmation == '0'
+    assert zamtel_pay_confirmation.json()['response_code'] == '0'
     return zamtel_pay_confirmation.json()
 
 
