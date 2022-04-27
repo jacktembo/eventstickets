@@ -6,6 +6,7 @@ from time import sleep
 
 import requests
 
+from . import phone_numbers
 from .models import KazangSession
 
 now = datetime.now().isoformat()
@@ -408,3 +409,17 @@ def zamtel_money_cash_out(phone_number, amount):
     cash_out_confirm = requests.post(base_url + 'zamtelMoneyCashOutConfirm', data=json.dumps(data), headers=headers)
     return cash_out_confirm.json
 
+
+def mobile_cash_in(phone_number, amount):
+    """Cash in to any mobile network by just providing a phone number and amount
+    in ngwee. The system will infer the network provider and call the appropriate
+    API cash in method.
+    """
+    if phone_numbers.get_network(phone_number) == 'airtel':
+        return airtel_cash_in(phone_number, amount)
+    elif phone_numbers.get_network(phone_number) == 'mtn':
+        return mtn_cash_in(phone_number, amount)
+    elif phone_numbers.get_network(phone_number) == 'zamtel':
+        return zamtel_cash_in(phone_number, amount)
+    else:
+        return 'Invalid phone number'
