@@ -96,8 +96,13 @@ class EventTicketAdmin(admin.ModelAdmin):
         return event_ticket.datetime_bought
 
 
+class KazangSessionAdmin(admin.ModelAdmin):
+    list_display = [
+        'date_time_created', 'session_uuid'
+    ]
+
 admin.site.register(Event, EventAdmin)
 admin.site.register(EventTicket, EventTicketAdmin)
 admin.site.register(All1ZedEventsCommission, All1ZedEventCommissionAdmin)
 admin.site.register(SliderImage)
-admin.site.register(KazangSession)
+admin.site.register(KazangSession, KazangSessionAdmin)
