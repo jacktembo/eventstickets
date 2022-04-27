@@ -333,3 +333,11 @@ def ticket_list_download(request):
         'events': events
     }
     return render(request, 'download_ticket_numbers.html', context)
+
+
+def scan_by_ticket_number(request):
+    if request.method == 'GET':
+        return render(request, 'verify_ticket.html')
+    elif request.method == 'POST':
+        ticket_number = request.POST.get('ticket_number', False)
+        return scan_ticket(request, ticket_number)
