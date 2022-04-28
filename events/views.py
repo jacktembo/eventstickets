@@ -205,6 +205,17 @@ def payment_approval(request, event_id):
                 }
                 return render(request, 'payment_success.html', context)
 
+            elif phone_numbers.get_network(event_mobile_money_number) == 'zamtel':
+                kazang.zamtel_cash_in(event_mobile_money_number, deposit)
+                ticket.save()
+                message = f"Dear {client_full_name}, Your {event.name} Ticket Number is {ticket.ticket_number}. Download your ticket at https://events.all1zed.com/{ticket.ticket_number}/download. Thank you for using All1Zed Tickets."
+                sms.send_sms(client_phone_number, message)
+                context = {
+                    'ticket_number': ticket.ticket_number, 'client_full_name': client_full_name,
+                    'ticket_price': ticket_price, 'event': event
+                }
+                return render(request, 'payment_success.html', context)
+
             else:
                 return HttpResponse('Event Owner phone number is invalid.')
 
