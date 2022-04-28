@@ -1,6 +1,6 @@
 from time import timezone
 from django.http import JsonResponse
-from django.shortcuts import render, HttpResponse, HttpResponseRedirect, get_object_or_404, get_list_or_404
+from django.shortcuts import render, HttpResponse, HttpResponseRedirect, get_object_or_404, get_list_or_404, redirect
 from django.urls import reverse
 
 from internal.models import TermsAndConditions
@@ -9,6 +9,7 @@ from django.db.models import Avg, Count, Min, Sum
 from datetime import datetime, date, timedelta, time
 from django.core.paginator import Paginator
 from django.views.generic import TemplateView
+from django.contrib import messages
 from django_xhtml2pdf.utils import pdf_decorator
 import requests
 import json
@@ -288,15 +289,15 @@ class TicketsListView(WeasyTemplateResponseMixin, TemplateView):
     template_name = 'tickets_list.html'
 
 
-def scan_ticket(request, ticket_number):
+def scan_ticket(ticket_number):
     ticket = EventTicket.objects.filter(ticket_number=ticket_number)
     if ticket.exists() and not ticket.first().scanned:
         ticket.update(scanned=True)
-        return JsonResponse('Verified Successfully', safe=False)
+        return 'verified'
     elif ticket.exists() and ticket.first().scanned:
-        return JsonResponse('Ticket Already Scanned', safe=False)
+        return 'scanned'
     else:
-        return JsonResponse('Invalid Ticket', safe=False)
+        return 'invalid'
 
 
 def events(request):
@@ -340,4 +341,15 @@ def scan_by_ticket_number(request):
         return render(request, 'verify_ticket.html')
     elif request.method == 'POST':
         ticket_number = request.POST.get('ticket_number', False)
-        return scan_ticket(request, ticket_number)
+        if scan_ticket(ticket_number) == 'verified':
+            messages.success(request, 'Verified Successfully')
+            return redirect('verify-by-ticket-number')
+        elif scan_ticket(ticket_number) == 'scanned':
+            messages.error(request, 'Ticket Already Scanned')
+            return redirect('verify-by-ticket-number')
+        elif scan_ticket(ticket_number) == ('invalid'):
+            messages.error(request, 'Invalid Ticket Number!')
+            return redirect('verify-by-ticket-number')
+        else:
+            return HttpResponse(str(scan_ticket(ticket_number)) == 'yoo')
+

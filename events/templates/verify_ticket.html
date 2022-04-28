@@ -1,45 +1,80 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Verify Ticket</title>
-</head>
-<style>
-    body {
-        background-color: #d5cdcd;
-    }
-    form {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        width: 40%;
-    }
-    input {
-        margin: 2rem;
-        width: 70vw;
-        height: 2.5rem;
-        border: 1px solid green;
-    }
-    button {
-        margin-left: 4.5rem;
-        width: 12rem;
-        height: 3rem;
-        border: 1px solid white;
-        background-color: dodgerblue;
-        color: white;
-        font-weight: bold;
-        font-size: 100%;
-        text-transform: uppercase;
-    }
-</style>
-<body>
-<form action="{% url 'verify-by-ticket-number' %}" method="post">
-    {% csrf_token %}
-    <label for="ticket_number"></label><input type="text" name="ticket_number" id="ticket_number" required maxlength="20" autofocus>
-    <button type="submit">Verify Ticket</button>
-</form>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block title %}
+    Verify Ticket
+{% endblock %}
+{% block stylesheet %}
+    <style>
+        body {
+            text-align: center;
+            background-color: #efeaea;
+        }
+
+        form {
+            display: inline-block;
+            padding: 1rem;
+        }
+
+        .verify {
+            margin-top: 10rem;
+            margin-bottom: 5rem;
+        }
+        .verification-title {
+            margin-bottom: 2rem;
+            text-transform: capitalize;
+            font-weight: bold;
+            font-size: 140%;
+            color: dodgerblue;
+            border: 1px solid dodgerblue;
+            padding: 1rem;
+        }
+        .message-box {
+            color: white;
+            background-color: #279b27;
+            font-weight: bold;
+            font-size: 150%;
+            border: 1px solid green;
+            margin: 1rem;
+        }
+        .verification-caption {
+            padding: 1rem;
+            font-weight: bold;
+            border: 1px solid dodgerblue;
+        }
+        input {
+            border: 1px solid dodgerblue !important;
+        }
+        @media screen and (min-width: 800px) {
+            .verify {
+                width: 40%;
+            }
+
+
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="main">
+        <form action="{% url 'verify-by-ticket-number' %}" class="verify" method="post">
+            {% csrf_token %}
+            {% if messages %}
+            {% for message in messages %}
+            <div class="message-box">
+            {{ message }}
+            </div>
+            {% endfor %}
+
+            {% endif %}
+            <h3 class="verification-title">Event Ticket Verification Center</h3>
+            <p class="verification-caption">
+                Welcome to All1Zed Event Ticket verification canter. You can verify
+                the authenticity of an Event Ticket here by just typing the ticket
+                number in the box below.
+            </p>
+            <div class="input-group">
+                <input type="search" class="form-control rounded" placeholder="Type Ticket Number" aria-label="Search"
+                       aria-describedby="search-addon" name="ticket_number" required maxlength="20"/>
+                <button type="submit" class="btn btn-outline-primary"><strong>Verify</strong></button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
