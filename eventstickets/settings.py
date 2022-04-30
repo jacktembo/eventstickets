@@ -95,7 +95,7 @@ dev_db = {
 }
 prod_db = {
     'default': {
-        'NAME': 'allzedco_events',
+        'NAME': 'allzedco_eventstickets',
         'ENGINE': 'mysql.connector.django',
         'USER': 'allzedco_root',
         'PASSWORD': 'Zambia2022!',

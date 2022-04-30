@@ -239,17 +239,13 @@ def nfs_cash_in(phone_number, amount):
     data = {
         "session_uuid": session_uuid
     }
-    data['product_id'] = '1648'
+    data['product_id'] = '5589'
     data['request_reference'] = code
     data['reference'] = phone_number
     data['amount'] = amount
     cash_in = requests.post(base_url + 'nfsCashIn', data=json.dumps(data), headers=headers)
-    data['confirmation_number'] = cash_in.json().get('confirmation_number', False)
-    data['request_reference'] = code2
-    del data['amount']
-    del data['reference']
-    nfs_cash_in_confirm = requests.post(base_url + 'nfsCashInConfirm', data=json.dumps(data), headers=headers)
-    return  nfs_cash_in_confirm.json()
+    
+    return cash_in.json()
 
 def zamtel_cash_in(phone_number, amount):
     alphabet = string.digits
