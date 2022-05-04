@@ -19,7 +19,7 @@ Ticket Payment waiting
     <h5 class="card-title">Please approve the transaction on your mobile device.</h5>
     <p class="card-text">A payment flash notification has been sent to your Mobile Money number. Please approve the transaction to proceed.</p>
 {#    <a href="#" class="btn btn-primary" id="check">Check Ticket Status</a>#}
-      <form action="{% url 'payment-approval' event_id=event_id %}" method="post">
+      <form action="{% url 'payment-approval' event_id=event_id %}" method="post" onSubmit="document.getElementById('submit').disabled=true;document.getElementById('submit').innerHTML='Processing... Please Wait';" onsubmit="return changeText('submit');">
           {% csrf_token %}
           <input type="hidden" name="client-phone-number" value="{{ client_phone_number }}">
           <input type="hidden" name="client-full-name" value="{{ client_full_name }}">
@@ -27,7 +27,7 @@ Ticket Payment waiting
           <input type="hidden" name="ticket-price" value="{{ ticket_price }}">
           <input type="hidden" name="reference-number" value={{ reference_number }}>
           <input type="hidden" name="event_id" value="{{ event_id }}">
-          <button type="submit" class="submit" id="submit">Check Payment</button>
+          <button type="submit" class="submit btn btn-warning" id="submit" >Check Payment</button>
       </form>
   </div>
   <div class="card-footer text-muted">
@@ -38,10 +38,20 @@ Ticket Payment waiting
     const btn = document.getElementById("submit")
     function activateButton() {
       btn.disabled = true;
+      btn.innerHTML = '<strong>Waiting For You To Confirm Payment On Your Mobile Device. Please Wait...</strong>'
       setTimeout(()=>{
         btn.disabled = false;
+        btn.innerHTML = '<strong>Verify Payment Now!</strong>'
         console.log('Button Activated')}, 20000)
     }
     activateButton()
+</script>
+<script type="text/javascript">
+    function changeText(submitId){
+        var submit = document.getElementById(submitId);
+        submit.value = 'Processing... Please wait';
+        return false;
+    };
+
 </script>
 {% endblock %}

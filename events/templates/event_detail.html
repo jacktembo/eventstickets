@@ -343,7 +343,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{% url 'card-payment' event_id=event.id %}" method="post">
+                    <form action="{% url 'card-payment' event_id=event.id %}" method="post" onSubmit="document.getElementById('submit-button').disabled=true; document.getElementById('submit-button').innerHTML='Please Wait...';">
                         {% csrf_token %}
                         <input type="hidden" name="event-id" value="{{ event.id }}">
                         <div class="mb-3">
@@ -390,7 +390,7 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel Order
                             </button>
-                            <button type="submit" class="btn btn-primary">Continue To Checkout</button>
+                            <button type="submit" class="btn btn-primary submit-button" id="submit-button">Continue To Checkout</button>
                         </div>
                     </form>
                 </div>
