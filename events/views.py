@@ -218,6 +218,8 @@ def payment_approval(request, event_id):
 
             else:
                 return HttpResponse('Event Owner phone number is invalid.')
+        else:
+            return HttpResponse('Your Transaction was Declined. Please Try Again!')
 
     elif phone_numbers.get_network(client_phone_number) == 'mtn':
         deposit = (float(ticket_price) * 100) - (float(ticket_price * 100) * (float(percentage_commission) / 100))
@@ -238,9 +240,9 @@ def payment_approval(request, event_id):
                 }
                 return render(request, 'payment_success.html', context)
             else:
-                return HttpResponse('There was a proplem processing your transaction. Please try again.')
+                return HttpResponse('There was a problem processing your transaction. Please try again.')
         else:
-            return HttpResponse('Transaction declined.')
+            return HttpResponse('Your Payment Was Declined. Please Try Again!')
 
 
 @pdf_decorator()
