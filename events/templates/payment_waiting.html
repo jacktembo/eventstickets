@@ -38,10 +38,10 @@ Ticket Payment waiting
     const btn = document.getElementById("submit")
     function activateButton() {
       btn.disabled = true;
-      btn.innerHTML = '<strong>Waiting For You To Confirm Payment On Your Mobile Device. Please Wait...</strong>'
+      btn.innerHTML = '<strong>Kindly Wait A Few Seconds To Confirm Your Payment. Please Wait...</strong>'
       setTimeout(()=>{
         btn.disabled = false;
-        btn.innerHTML = '<strong>Verify Payment Now!</strong>'
+        btn.innerHTML = '<strong>Confirm Payment Now!</strong>'
         console.log('Button Activated')}, 20000)
     }
     activateButton()
