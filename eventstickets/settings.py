@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-h=-w4r^+9xst3kjp)81q12a@tzt0j&da2*c#ht&pt-x1a278)-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 CORS_ALLOW_ALL_ORIGINS = True
@@ -140,9 +140,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-MEDIA_URL = '/media/'
+STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR/'staticfiles'
+MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR/'media'
 
 
@@ -193,4 +193,4 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 EASY_MAPS_GOOGLE_KEY = 'AIzaSyA4M3GTDZHQKqc6TDo0dZGcA8qwRMkJDvk'
 GOOGLE_MAPS_API_KEY = EASY_MAPS_GOOGLE_KEY
 
-
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
