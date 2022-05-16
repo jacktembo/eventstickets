@@ -18,9 +18,14 @@ TICKET_TYPE = [
     ('VVIP', 'VVIP'), ('VIP', 'VIP'), ('General', 'General')
 ]
 
+EVENT_TYPE = [
+    ('Concert', 'Concert'), ('Football Match', 'Football Match'), ('Movie', 'Movie'),
+    ('Conference', 'Conference'), ('Seminar', 'Seminar'), ('Event', 'Event'),
+]
 
 class Event(models.Model):
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, editable=False, default=1)
+    event_type = models.CharField(max_length=100, choices=EVENT_TYPE, help_text='Type of Event e.g Concert.')
     name = models.CharField(max_length=50, verbose_name='Event Name',
                             help_text='The name of the Event must be descriptive and not misleading.')
     description = RichTextUploadingField()

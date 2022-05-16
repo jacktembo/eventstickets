@@ -2,7 +2,8 @@ from time import timezone
 from django.http import JsonResponse
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect, get_object_or_404, get_list_or_404, redirect
 from django.urls import reverse
-
+import requests
+import base64
 from internal.models import TermsAndConditions
 from .models import Event, EventTicket, SliderImage, All1ZedEventsCommission
 from django.db.models import Avg, Count, Min, Sum
@@ -256,6 +257,9 @@ class DownloadView(WeasyTemplateResponseMixin, TemplateView):
         ticket_number = self.ticket_number
         ticket = get_object_or_404(EventTicket, ticket_number=ticket_number)
         event = ticket.event
+        image_url = event.banner_image.url
+        base64_data = base64.b64encode(requests.get(image_url).content)
+        image_str = base64_data.decode('ascii')
         qrcode_image = f'https://api.qrserver.com/v1/create-qr-code/?data={ticket_number}&size=200x200&format=svg'
         context = {
             'ticket': ticket, 'banner_image_url': event.banner_image.url, 'qrcode_image': qrcode_image,
