@@ -328,7 +328,10 @@ def scan_ticket_api(request, ticket_number):
         ticket.update(scanned=True)
         return Response({'status': 'success', 'message': 'Verified Successfully'})
     elif ticket.exists() and ticket.first().scanned:
-        return Response({'status': 'failed', 'message': 'Already Scanned'})
+        return Response({'status': 'failed', 'message': 'Already Scanned',
+                         'full_name': ticket.first().client_full_name,
+                         'phone_number': ticket.first().client_phone_number
+                         })
     else:
         return Response({'status': 'failed', 'message': 'Invalid Ticket Number'})
 
