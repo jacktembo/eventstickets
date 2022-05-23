@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     "corsheaders",
     'debug_toolbar',
+    'rest_framework',
 ]
 MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
@@ -156,7 +157,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'COERCE_DECIMAL_TO_STRING': False,
     'PAGE_SIZE': 10,
@@ -194,3 +194,4 @@ EASY_MAPS_GOOGLE_KEY = 'AIzaSyA4M3GTDZHQKqc6TDo0dZGcA8qwRMkJDvk'
 GOOGLE_MAPS_API_KEY = EASY_MAPS_GOOGLE_KEY
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+

@@ -31,6 +31,8 @@ urlpatterns = [
     path('terms', views.terms, name='terms'),
     path('ticket-list-download', views.ticket_list_download, name='ticket-list-download'),
     path('verify-ticket', views.scan_by_ticket_number, name='verify-by-ticket-number'),
+    path('api-auth/', include('rest_framework.urls')),
+    path('api/<ticket_number>/scan', views.scan_ticket_api, name='scan-ticket-api'),
 ]
 if settings.DEBUG or settings.DEBUG == False:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

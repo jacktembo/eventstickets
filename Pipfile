@@ -24,6 +24,7 @@ django-google-maps = "*"
 django-easy-maps = "*"
 googlemaps = "*"
 schedule = "*"
+djangorestframework = "*"
 
 [dev-packages]
 

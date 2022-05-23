@@ -4,6 +4,10 @@ from django.shortcuts import render, HttpResponse, HttpResponseRedirect, get_obj
 from django.urls import reverse
 import requests
 import base64
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
 from internal.models import TermsAndConditions
 from .models import Event, EventTicket, SliderImage, All1ZedEventsCommission
 from django.db.models import Avg, Count, Min, Sum
@@ -315,6 +319,18 @@ def scan_ticket(ticket_number):
         return 'scanned'
     else:
         return 'invalid'
+
+
+@api_view()
+def scan_ticket_api(request, ticket_number):
+    ticket = EventTicket.objects.filter(ticket_number=ticket_number)
+    if ticket.exists() and not ticket.first().scanned:
+        ticket.update(scanned=True)
+        return Response({'status': 'success', 'message': 'Verified Successfully'})
+    elif ticket.exists() and ticket.first().scanned:
+        return Response({'status': 'failed', 'message': 'Already Scanned'})
+    else:
+        return Response({'status': 'failed', 'message': 'Invalid Ticket Number'})
 
 
 def events(request):
