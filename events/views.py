@@ -326,7 +326,10 @@ def scan_ticket_api(request, ticket_number):
     ticket = EventTicket.objects.filter(ticket_number=ticket_number)
     if ticket.exists() and not ticket.first().scanned:
         ticket.update(scanned=True)
-        return Response({'status': 'success', 'message': 'Verified Successfully'})
+        return Response({'status': 'success', 'message': 'Verified Successfully',
+                         'full_name': ticket.first().client_full_name,
+                         'phone_number': ticket.first().client_phone_number
+                         })
     elif ticket.exists() and ticket.first().scanned:
         return Response({'status': 'failed', 'message': 'Already Scanned',
                          'full_name': ticket.first().client_full_name,
