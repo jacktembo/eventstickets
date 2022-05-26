@@ -42,6 +42,7 @@ Ticket Payment waiting
       setTimeout(()=>{
         btn.disabled = false;
         btn.innerHTML = '<strong>Confirm Payment Now!</strong>'
+        btn.click()
         console.log('Button Activated')}, 20000)
     }
     activateButton()
