@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:mysql://localhost:3306/events</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="@app" uuid="6b6cbc1e-0530-499e-9555-24dfdebb1e51">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://server.all1zed.com:3306/allzedco_app</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

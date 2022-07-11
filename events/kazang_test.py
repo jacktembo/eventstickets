@@ -390,3 +390,5 @@ def spenn_cash_out(phone_number, amount):
     data['request_reference'] = code4
     approval_confirm = requests.post(base_url + 'spennCashOutApprovalConfirm', data=json.dumps(data), headers=headers)
     return cash_out.json()
+
+print(get_new_session_uuid())
