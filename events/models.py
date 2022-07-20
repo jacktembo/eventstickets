@@ -41,10 +41,10 @@ class Event(models.Model):
     time_starting = models.TimeField(verbose_name='At what time will this event start')
     date_ending = models.DateField(verbose_name='When will this Event close?')
     time_ending = models.TimeField(verbose_name='At what time will this Event close?')
-    vvip_ticket_price = models.IntegerField(verbose_name='VVIP Ticket Price', blank=True, null=True)
-    vip_ticket_price = models.IntegerField(verbose_name='VIP Ticket Price',
+    vvip_ticket_price = models.FloatField(verbose_name='VVIP Ticket Price', blank=True, null=True)
+    vip_ticket_price = models.FloatField(verbose_name='VIP Ticket Price',
                                            help_text='Price is in Zambian Kwacha (ZMW)', null=True, blank=True)
-    general_ticket_price = models.IntegerField(verbose_name='General Ticket Price (Ordinary)',
+    general_ticket_price = models.FloatField(verbose_name='General Ticket Price (Ordinary)',
                                                help_text='For events that have the General ticket setup.', blank=True, null=True)
     grand_stand_price = models.FloatField(blank=True, null=True)
     open_wing_price = models.FloatField(blank=True, null=True)
