@@ -40,6 +40,8 @@ class EventAdmin(ModelAdmin):
     list_per_page = 10
     search_help_text = 'Search Events'
 
+
+
     def total_tickets_sold(self, event):
         return EventTicket.objects.filter(event=event).count()
 

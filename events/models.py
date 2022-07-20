@@ -23,6 +23,7 @@ EVENT_TYPE = [
     ('Conference', 'Conference'), ('Seminar', 'Seminar'), ('Event', 'Event'),
 ]
 
+
 class Event(models.Model):
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, editable=False, default=1)
     event_type = models.CharField(max_length=100, choices=EVENT_TYPE, help_text='Type of Event e.g Concert.')
@@ -40,11 +41,25 @@ class Event(models.Model):
     time_starting = models.TimeField(verbose_name='At what time will this event start')
     date_ending = models.DateField(verbose_name='When will this Event close?')
     time_ending = models.TimeField(verbose_name='At what time will this Event close?')
-    vvip_ticket_price = models.IntegerField(verbose_name='VVIP Ticket Price')
-    vip_ticket_price = models.IntegerField(verbose_name='VIP Ticket Price',
-                                           help_text='Price is in Zambian Kwacha (ZMW)')
+    vvip_ticket_price = models.IntegerField(verbose_name='VVIP Ticket Price', blank=True, null=True)
+    vip_ticket_price = models.IntegerField(verbose_name='VIP Ticket Price (Optional)',
+                                           help_text='Price is in Zambian Kwacha (ZMW)', null=True, blank=True)
     general_ticket_price = models.IntegerField(verbose_name='General Ticket Price (Ordinary)',
-                                               help_text='Price is in Zambian Kwacha (ZMW)')
+                                               help_text='For events that have the General ticket setup.', blank=True, null=True)
+    grand_stand_price = models.FloatField(blank=True, null=True)
+    open_wing_price = models.FloatField(blank=True, null=True)
+    west_wing_price = models.FloatField(blank=True, null=True)
+    east_wing_price = models.FloatField(blank=True, null=True)
+    north_wing_price = models.FloatField(blank=True, null=True)
+    south_wing_price = models.FloatField(blank=True, null=True)
+    lower_north_orange = models.FloatField(null=True, blank=True, verbose_name='Lower North (Orange)')
+    upper_north_orange = models.FloatField(null=True, blank=True, verbose_name='Upper North (Orange)')
+    upper_south_orange = models.FloatField(null=True, blank=True, verbose_name='Upper South (Orange)')
+    lower_south_orange = models.FloatField(null=True, blank=True, verbose_name='Lower South (Orange)')
+    upper_east_blue = models.FloatField(null=True, blank=True, verbose_name='Upper East Blue')
+    lower_east_blue = models.FloatField(null=True, blank=True, verbose_name='Lower East Blue')
+    west_wing_blue = models.FloatField(null=True, blank=True, verbose_name='West Wing (Blue)')
+    children_price = models.FloatField(null=True, blank=True)
     sitting_plan = models.ImageField(upload_to='SittingPlans')
     age_or_gender_restriction = models.CharField(max_length=255, choices=AGE_OR_GENDER_RESTRICTION,
                                                  help_text='Who is Eligible to attend this Event?')
