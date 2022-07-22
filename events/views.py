@@ -332,7 +332,7 @@ def scan_ticket_api(request, ticket_number):
                          'ticket_type': ticket.first().type
                          })
     elif ticket.exists() and ticket.first().scanned:
-        return Response({'status': 'failed', 'message': 'Already Scanned',
+        return Response({'status': 'already scanned', 'message': 'Already Scanned',
                          'full_name': ticket.first().client_full_name,
                          'phone_number': ticket.first().client_phone_number,
                          'ticket_type': ticket.first().type
