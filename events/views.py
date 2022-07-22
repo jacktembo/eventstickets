@@ -328,12 +328,14 @@ def scan_ticket_api(request, ticket_number):
         ticket.update(scanned=True)
         return Response({'status': 'success', 'message': 'Verified Successfully',
                          'full_name': ticket.first().client_full_name,
-                         'phone_number': ticket.first().client_phone_number
+                         'phone_number': ticket.first().client_phone_number,
+                         'ticket_type': ticket.first().type
                          })
     elif ticket.exists() and ticket.first().scanned:
         return Response({'status': 'failed', 'message': 'Already Scanned',
                          'full_name': ticket.first().client_full_name,
-                         'phone_number': ticket.first().client_phone_number
+                         'phone_number': ticket.first().client_phone_number,
+                         'ticket_type': ticket.first().type
                          })
     else:
         return Response({'status': 'failed', 'message': 'Invalid Ticket Number'})
@@ -392,3 +394,21 @@ def scan_by_ticket_number(request):
         else:
             return HttpResponse(str(scan_ticket(ticket_number)) == 'yoo')
 
+
+def scan_api(request, ticket_number):
+    ticket = EventTicket.objects.get(ticket_number=ticket_number)
+    if scan_ticket(ticket_number) == 'verified':
+        return JsonResponse({
+            'name': ticket.client_full_name, 'phone_number': ticket.client_phone_number,
+            'ticket_type': ticket.type, 'status': 'success', 'response_code': 0
+        })
+    elif scan_ticket(ticket_number) == 'scanned':
+        return JsonResponse({
+            'name': ticket.client_full_name, 'phone_number': ticket.client_phone_number,
+            'ticket_type': ticket.type,
+            'status': 'already scanned', 'response_code': 1
+        })
+    elif scan_ticket(ticket_number) == ('invalid'):
+        return JsonResponse({
+            'status': 'invalid', 'response_code': 2
+        })
