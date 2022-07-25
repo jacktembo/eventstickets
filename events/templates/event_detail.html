@@ -363,10 +363,63 @@
                             <select class="form-select" aria-label="Default select example"
                                     name="ticket-type" required>
                                 <option selected>------</option>
-                                <option value="VVIP">VVIP - K{{ event.vvip_ticket_price }} Per Ticket</option>
-                                <option value="VIP">VIP - K{{ event.vip_ticket_price }} Per Ticket</option>
-                                <option value="General">General-Ticket - K{{ event.general_ticket_price }} Per Ticket
-                                </option>
+                                {% if event.vvip_ticket_price %}
+                                    <option value="VVIP">VVIP - K{{ event.vvip_ticket_price }} Per Ticket</option>
+                                {% endif %}
+                                {% if event.vip_ticket_price %}
+                                    <option value="VIP">VIP - K{{ event.vip_ticket_price }} Per Ticket</option>
+                                {% endif %} 
+                                {% if event.general_ticket_price %}
+                                    <option value="General">General - K{{ event.general_ticket_price }} Per Ticket</option>
+                                {% endif %}
+                                {% if event.vip_red %}
+                                    <option value="vip_red">VIP (Red) - K{{ event.vip_red }} Per Ticket</option>
+                                {% endif %}
+                                {% if event.vip_orange %}
+                                    <option value="vip_orange">VIP (Orange) - {{ event.vip_orange }} Per Ticket</option>
+                                {% endif %}
+                                {% if event.grand_stand_price %}
+                                    <option value="grand_stand">Grand Stand - K{{ event.grand_stand_price }} Per Ticket</option>
+                                {% endif %}
+                                {% if event.open_wing_price %}
+                                    <option value="open_wing">Open Wing - K{{ event.open_wing_price }} Per Ticket</option>
+                                {% endif %}
+                                {% if event %}
+                                    <option value="west_wing">West Wing - K{{ event.west_wing_price }} Per Ticket</option>
+                                {% endif %}
+                                {% if event.east_wing_price %}
+                                    <option value="east_wing">East Wing - K{{ event.east_wing_price }} Per Ticket</option>
+                                {% endif %}
+                                {% if event.north_wing_price %}
+                                    <option value="north_wing">North Wing - K{{ event.north_wing_price }}</option>
+                                {% endif %}
+                                {% if event.south_wing_price %}
+                                    <option value="south_wing">South Wing - K{{ event.south_wing_price }} Per Ticket</option>
+                                {% endif %}
+                                {% if event.lower_north_orange %}
+                                    <option value="lower_north_orange">Lower North (Orange) - K{{ event.lower_north_orange }} Per Ticket</option>
+                                {% endif %}
+                                {% if event.upper_north_orange %}
+                                    <option value="upper_north_orange">Upper North Orange - K{{ event.upper_north_orange }} Per Ticket</option>
+                                {% endif %}
+                                {% if event.upper_south_orange%}
+                                    <option value="upper_south_orange">Upper South (Orange) - K{{ event.upper_south_orange }} Per Ticket Price</option>
+                                {% endif %}
+                                {% if event.lower_south_orange %}
+                                    <option value="lower_south_orange">Lower South (Orange) - K{{ event.lower_south_orange }} Per Ticket</option>
+                                {% endif %} 
+                                {% if event.upper_east_blue %}
+                                    <option value="upper_east_blue">Upper East (Blue) - K{{ event.upper_east_blue }} Per Ticket</option>
+                                {% endif %}
+                                {% if event.lower_east_blue %}
+                                    <option value="lower_east_blue">Lower East (Blue) - K{{ event.lower_east_blue }} Per Ticket</option>
+                                {% endif %}
+                                {% if event.west_wing_blue %}
+                                    <option value="west_wing_blue">West Wing (Blue) - {{ event.west_wing_blue }} Per Ticket</option>
+                                {% endif %}
+                                {% if event.children_price %}
+                                    <option value="children">Children - K{{ event.children_price }} Per Ticket</option>
+                                {% endif %}
                             </select>
                         </div>
                         {#                        <div class="mb-3">#}

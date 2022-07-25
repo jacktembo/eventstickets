@@ -4,7 +4,7 @@ from django.shortcuts import render, HttpResponse, HttpResponseRedirect, get_obj
 from django.urls import reverse
 import requests
 import base64
-
+from django.db.models.options import Options
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -76,6 +76,7 @@ def event_detail(request, pk):
     context = {
         'event': event,
     }
+
     return render(request, 'event_detail.html', context)
 
 
