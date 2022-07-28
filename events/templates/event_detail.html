@@ -278,19 +278,130 @@
             <div class="organizer event-wrap-text"><span>Organizer: </span>{{ event.organizer | truncatechars:20 }}
             </div>
         </div>
+        {% if event.vvip_ticket_price %}
         <div class="vvip-ticket-price-wrap event-wrap">
             <img src="{% static 'assets/images/vip-pass.svg' %}" alt="VVIP ticket price">
             <div class="vvip-ticket-price"><span>VVIP Ticket: </span>K{{ event.vvip_ticket_price }}</div>
         </div>
+        {% endif %}
+        {% if event.vip_ticket_price %}
         <div class="vip-ticket-price-wrap event-wrap">
             <img src="{% static 'assets/images/vip-price.svg' %}" alt="VIP ticket price">
             <div class="vip-ticket-price event-wrap-text"><span>VIP Ticket: </span>K{{ event.vip_ticket_price }}</div>
         </div>
+        {% endif %}
+        {% if event.general_ticket_price %}
         <div class="general-ticket-price-wrap event-wrap">
             <img src="{% static 'assets/images/ordinary.svg' %}" alt="General ticket price">
             <div class="general-ticket-price event-wrap-text">
                 <span>General Ticket: </span>K{{ event.general_ticket_price }}</div>
         </div>
+        {% endif %}
+        {% if event.vip_orange %}
+        <div class="general-ticket-price-wrap event-wrap">
+            <img src="{% static 'assets/images/ordinary.svg' %}" alt="General ticket price">
+            <div class="general-ticket-price event-wrap-text">
+                <span>VIP (Orange): </span>K{{ event.vip_orange }}</div>
+        </div>
+        {% endif %}
+        {% if event.vip_red %}
+        <div class="general-ticket-price-wrap event-wrap">
+            <img src="{% static 'assets/images/ordinary.svg' %}" alt="General ticket price">
+            <div class="general-ticket-price event-wrap-text">
+                <span>VIP (Red): </span>K{{ event.vip_red }}</div>
+        </div>
+        {% endif %}
+        {% if event.grand_stand_price %}
+        <div class="general-ticket-price-wrap event-wrap">
+            <img src="{% static 'assets/images/ordinary.svg' %}" alt="General ticket price">
+            <div class="general-ticket-price event-wrap-text">
+                <span>Grand Stand: </span>K{{ event.grand_stand_price }}</div>
+        </div>
+        {% endif %}
+        {% if event.open_wing_price %}
+        <div class="general-ticket-price-wrap event-wrap">
+            <img src="{% static 'assets/images/ordinary.svg' %}" alt="General ticket price">
+            <div class="general-ticket-price event-wrap-text">
+                <span>Open Wing: </span>K{{ event.open_wing_price }}</div>
+        </div>
+        {% endif %}
+        {% if event.west_wing_price %}
+        <div class="general-ticket-price-wrap event-wrap">
+            <img src="{% static 'assets/images/ordinary.svg' %}" alt="General ticket price">
+            <div class="general-ticket-price event-wrap-text">
+                <span>West Wing: </span>K{{ event.west_wing_price }}</div>
+        </div>
+        {% endif %}
+        {% if event.east_wing_price %}
+        <div class="general-ticket-price-wrap event-wrap">
+            <img src="{% static 'assets/images/ordinary.svg' %}" alt="General ticket price">
+            <div class="general-ticket-price event-wrap-text">
+                <span>East Wing: </span>K{{ event.east_wing_price }}</div>
+        </div>
+        {% endif %}
+        {% if event.north_wing_price %}
+        <div class="general-ticket-price-wrap event-wrap">
+            <img src="{% static 'assets/images/ordinary.svg' %}" alt="General ticket price">
+            <div class="general-ticket-price event-wrap-text">
+                <span>North Wing: </span>K{{ event.north_wing_price }}</div>
+        </div>
+        {% endif %}
+        {% if event.south_wing_price %}
+        <div class="general-ticket-price-wrap event-wrap">
+            <img src="{% static 'assets/images/ordinary.svg' %}" alt="General ticket price">
+            <div class="general-ticket-price event-wrap-text">
+                <span>South Wing: </span>K{{ event.south_wing_price }}</div>
+        </div>
+        {% endif %}
+        {% if event.lower_north_orange %}
+        <div class="general-ticket-price-wrap event-wrap">
+            <img src="{% static 'assets/images/ordinary.svg' %}" alt="General ticket price">
+            <div class="general-ticket-price event-wrap-text">
+                <span>Lower North (Orange): </span>K{{ event.lower_north_orange }}</div>
+        </div>
+        {% endif %}
+        {% if event.lower_south_orange %}
+        <div class="general-ticket-price-wrap event-wrap">
+            <img src="{% static 'assets/images/ordinary.svg' %}" alt="General ticket price">
+            <div class="general-ticket-price event-wrap-text">
+                <span>Lower South (Orange): </span>K{{ event.lower_south_orange }}</div>
+        </div>
+        {% endif %}
+        {% if event.upper_south_orange %}
+        <div class="general-ticket-price-wrap event-wrap">
+            <img src="{% static 'assets/images/ordinary.svg' %}" alt="General ticket price">
+            <div class="general-ticket-price event-wrap-text">
+                <span>Upper South (Orange): </span>K{{ event.upper_south_orange }}</div>
+        </div>
+        {% endif %}
+        {% if event.upper_east_blue %}
+        <div class="general-ticket-price-wrap event-wrap">
+            <img src="{% static 'assets/images/ordinary.svg' %}" alt="General ticket price">
+            <div class="general-ticket-price event-wrap-text">
+                <span>Upper East (Blue): </span>K{{ event.upper_east_blue }}</div>
+        </div>
+        {% endif %}
+        {% if event.lower_east_blue %}
+        <div class="general-ticket-price-wrap event-wrap">
+            <img src="{% static 'assets/images/ordinary.svg' %}" alt="General ticket price">
+            <div class="general-ticket-price event-wrap-text">
+                <span>Lower East (Blue): </span>K{{ event.lower_east_blue }}</div>
+        </div>
+        {% endif %}
+        {% if event.west_wing_blue %}
+        <div class="general-ticket-price-wrap event-wrap">
+            <img src="{% static 'assets/images/ordinary.svg' %}" alt="General ticket price">
+            <div class="general-ticket-price event-wrap-text">
+                <span>West Wing (Blue): </span>K{{ event.west_wing_blue }}</div>
+        </div>
+        {% endif %}
+        {% if event.children_price %}
+        <div class="general-ticket-price-wrap event-wrap">
+            <img src="{% static 'assets/images/ordinary.svg' %}" alt="General ticket price">
+            <div class="general-ticket-price event-wrap-text">
+                <span>Children: </span>K{{ event.children_price }}</div>
+        </div>
+        {% endif %}
 
         <div class="sitting-plan-wrap event-wrap graphics">
             <img src="{{ event.sitting_plan.url }}" alt="sitting-plan">
