@@ -68,6 +68,9 @@ def index(request):
         'slider_images': slider_images, 'first_slider_image': first_slider_image,
         'second_slider_image': second_slider_image, 'third_slider_image': third_slider_image,
     }
+
+
+
     return render(request, 'index.html', context)
 
 

@@ -76,6 +76,19 @@ class Event(models.Model):
     def __str__(self):
         return self.name
 
+    def find_min_price(self):
+        prices = [
+            self.vip_ticket_price, self.vvip_ticket_price, self.general_ticket_price,
+            self.children_price, self.vip_orange, self.vip_red, self.grand_stand_price,
+            self.open_wing_price, self.west_wing_price, self.east_wing_price,
+            self.north_wing_price, self.south_wing_price, self.lower_north_orange,
+            self.upper_north_orange, self.upper_south_orange, self.upper_east_blue,
+            self.lower_east_blue, self.west_wing_blue
+        ]
+        final_prices = sorted([price for price in prices if price is not None])
+        min_price = min(final_prices)
+        return min_price
+
 
 class EventTicket(models.Model):
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, editable=False, default=1)
