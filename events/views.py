@@ -9,7 +9,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from internal.models import TermsAndConditions
-from .models import Event, EventTicket, SliderImage, All1ZedEventsCommission
+from .kazang import session_uuid
+from .models import Event, EventTicket, SliderImage, All1ZedEventsCommission, Transaction
 from django.db.models import Avg, Count, Min, Sum
 from datetime import datetime, date, timedelta, time
 from django.core.paginator import Paginator
@@ -68,8 +69,6 @@ def index(request):
         'slider_images': slider_images, 'first_slider_image': first_slider_image,
         'second_slider_image': second_slider_image, 'third_slider_image': third_slider_image,
     }
-
-
 
     return render(request, 'index.html', context)
 
@@ -189,33 +188,87 @@ def payment_approval(request, event_id):
     ticket = EventTicket(event=event, client_full_name=client_full_name,
                          type=ticket_type, user=event.user,
                          client_phone_number=client_phone_number)
+    # Airtel payment workflow begins.
     if phone_numbers.get_network(client_phone_number) == 'airtel':
         r = kazang.airtel_pay_query(client_phone_number, charge, reference_number)
         if r.get('response_code', False) == '0':
             deposit = (float(ticket_price) * 100) - (float(ticket_price * 100) * (float(percentage_commission) / 100))
             if phone_numbers.get_network(event_mobile_money_number) == 'airtel':
-                kazang.airtel_cash_in(event_mobile_money_number, deposit)
-                ticket.save()
-                message = f"Dear {client_full_name}, Your {event.name} Ticket Number is {ticket.ticket_number}. Download your ticket at https://events.all1zed.com/{ticket.ticket_number}/download. Thank you for using All1Zed Tickets."
-                sms.send_sms(client_phone_number, message)
-                context = {
-                    'ticket_number': ticket.ticket_number, 'client_full_name': client_full_name,
-                    'ticket_price': ticket_price, 'event': event
-                }
-                return render(request, 'payment_success.html', context)
-            elif phone_numbers.get_network(event_mobile_money_number) == 'mtn':
-                kazang.mtn_cash_in(event_mobile_money_number, deposit)
-                ticket.save()
-                message = f"Dear {client_full_name}, Your {event.name} Ticket Number is {ticket.ticket_number}. Download your ticket at https://events.all1zed.com/{ticket.ticket_number}/download. Thank you for using All1Zed Tickets."
-                sms.send_sms(client_phone_number, message)
-                context = {
-                    'ticket_number': ticket.ticket_number, 'client_full_name': client_full_name,
-                    'ticket_price': ticket_price, 'event': event
-                }
-                return render(request, 'payment_success.html', context)
+                cash_in = kazang.airtel_cash_in(event_mobile_money_number, deposit)
+                try:
+                    if cash_in.get('response_code', False) == '0':
+                        Transaction.objects.create(
+                            name='Event Owner Cash In', type='cash_in', session_uuid=session_uuid,
+                            status='successful', product_id=5305, amount=float(deposit),
+                            phone_number=int(event_mobile_money_number),
+                            request_reference=cash_in.get('request_reference', None), provider_reference='N/A',
+                        )
+                    else:
+                        Transaction.objects.create(
+                            name='Event Owner Cash In', type='cash_in', session_uuid=session_uuid,
+                            status='failed', product_id=5305, amount=float(deposit),
+                            phone_number=int(event_mobile_money_number),
+                            request_reference=cash_in.get('request_reference', None), provider_reference='N/A',
+                        )
+                except:
+                    print('something went wrong')
 
+                ticket.save()
+                message = f"Dear {client_full_name}, Your {event.name} Ticket Number is {ticket.ticket_number}. Download your ticket at https://events.all1zed.com/{ticket.ticket_number}/download. Thank you for using All1Zed Tickets."
+                sms.send_sms(client_phone_number, message)
+                context = {
+                    'ticket_number': ticket.ticket_number, 'client_full_name': client_full_name,
+                    'ticket_price': ticket_price, 'event': event
+                }
+                return render(request, 'payment_success.html', context)
+            # MTN payment workflow begins.
+            elif phone_numbers.get_network(event_mobile_money_number) == 'mtn':
+                cash_in = kazang.mtn_cash_in(event_mobile_money_number, deposit)
+                try:
+                    if cash_in.get('response_code', False) == '0':
+                        Transaction.objects.create(
+                            name='Event Owner Cash In', type='cash_in', session_uuid=session_uuid,
+                            status='successful', product_id=5305, amount=float(deposit),
+                            phone_number=int(event_mobile_money_number),
+                            request_reference=cash_in.get('request_reference', None), provider_reference='N/A',
+                        )
+                    else:
+                        Transaction.objects.create(
+                            name='Event Owner Cash In', type='cash_in', session_uuid=session_uuid,
+                            status='failed', product_id=5305, amount=float(deposit),
+                            phone_number=int(event_mobile_money_number),
+                            request_reference=cash_in.get('request_reference', None), provider_reference='N/A',
+                        )
+                except:
+                    print('something went wrong')
+                ticket.save()
+                message = f"Dear {client_full_name}, Your {event.name} Ticket Number is {ticket.ticket_number}. Download your ticket at https://events.all1zed.com/{ticket.ticket_number}/download. Thank you for using All1Zed Tickets."
+                sms.send_sms(client_phone_number, message)
+                context = {
+                    'ticket_number': ticket.ticket_number, 'client_full_name': client_full_name,
+                    'ticket_price': ticket_price, 'event': event
+                }
+                return render(request, 'payment_success.html', context)
+            # Zamtel Payment Workflow begins
             elif phone_numbers.get_network(event_mobile_money_number) == 'zamtel':
-                kazang.zamtel_cash_in(event_mobile_money_number, deposit)
+                cash_in = kazang.zamtel_cash_in(event_mobile_money_number, deposit)
+                try:
+                    if cash_in.get('response_code', False) == '0':
+                        Transaction.objects.create(
+                            name='Event Owner Cash In', type='cash_in', session_uuid=session_uuid,
+                            status='successful', product_id=5305, amount=float(deposit),
+                            phone_number=int(event_mobile_money_number),
+                            request_reference=cash_in.get('request_reference', None), provider_reference='N/A',
+                        )
+                    else:
+                        Transaction.objects.create(
+                            name='Event Owner Cash In', type='cash_in', session_uuid=session_uuid,
+                            status='failed', product_id=5305, amount=float(deposit),
+                            phone_number=int(event_mobile_money_number),
+                            request_reference=cash_in.get('request_reference', None), provider_reference='N/A',
+                        )
+                except:
+                    print('something went wrong')
                 ticket.save()
                 message = f"Dear {client_full_name}, Your {event.name} Ticket Number is {ticket.ticket_number}. Download your ticket at https://events.all1zed.com/{ticket.ticket_number}/download. Thank you for using All1Zed Tickets."
                 sms.send_sms(client_phone_number, message)

@@ -26,3 +26,4 @@ class TermsAndConditions(models.Model):
         verbose_name_plural = 'Terms And Conditions'
         verbose_name = 'Terms And Conditions'
 
+

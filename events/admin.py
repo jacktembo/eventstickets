@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
-from .models import Event, EventTicket, All1ZedEventsCommission, SliderImage, KazangSession
+from .models import Event, EventTicket, All1ZedEventsCommission, SliderImage, KazangSession, Transaction
 from django.db.models import Sum
 percentage_commission = int(All1ZedEventsCommission.objects.all().first().percentage_commission)
 
@@ -105,6 +105,13 @@ class KazangSessionAdmin(admin.ModelAdmin):
     list_display = [
         'date_time_created', 'session_uuid'
     ]
+
+@admin.register(Transaction)
+class TransactionAdmin(admin.ModelAdmin):
+    list_display = [
+        'phone_number', 'amount', 'status', 'type', 'date_time_created',
+    ]
+    list_filter = ['date_time_created', 'type']
 
 admin.site.register(Event, EventAdmin)
 admin.site.register(EventTicket, EventTicketAdmin)
